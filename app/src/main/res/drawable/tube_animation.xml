@@ -1,0 +1,51 @@
+<animation-list android:id="@+id/tubeAnimation"
+    android:oneshot="false"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/tube_00" android:duration="10" />
+    <item android:drawable="@drawable/tube_02" android:duration="10" />
+    <item android:drawable="@drawable/tube_04" android:duration="10" />
+    <item android:drawable="@drawable/tube_06" android:duration="10" />
+    <item android:drawable="@drawable/tube_08" android:duration="10" />
+    <item android:drawable="@drawable/tube_10" android:duration="10" />
+    <item android:drawable="@drawable/tube_12" android:duration="10" />
+    <item android:drawable="@drawable/tube_14" android:duration="10" />
+    <item android:drawable="@drawable/tube_16" android:duration="10" />
+    <item android:drawable="@drawable/tube_18" android:duration="10" />
+    <item android:drawable="@drawable/tube_20" android:duration="10" />
+    <item android:drawable="@drawable/tube_22" android:duration="10" />
+    <item android:drawable="@drawable/tube_24" android:duration="10" />
+    <item android:drawable="@drawable/tube_26" android:duration="10" />
+    <item android:drawable="@drawable/tube_28" android:duration="10" />
+    <item android:drawable="@drawable/tube_30" android:duration="10" />
+    <item android:drawable="@drawable/tube_32" android:duration="10" />
+    <item android:drawable="@drawable/tube_34" android:duration="10" />
+    <item android:drawable="@drawable/tube_36" android:duration="10" />
+    <item android:drawable="@drawable/tube_38" android:duration="10" />
+    <item android:drawable="@drawable/tube_40" android:duration="10" />
+    <item android:drawable="@drawable/tube_42" android:duration="10" />
+    <item android:drawable="@drawable/tube_44" android:duration="10" />
+    <item android:drawable="@drawable/tube_46" android:duration="10" />
+    <item android:drawable="@drawable/tube_48" android:duration="10" />
+    <item android:drawable="@drawable/tube_50" android:duration="10" />
+    <item android:drawable="@drawable/tube_52" android:duration="10" />
+    <item android:drawable="@drawable/tube_54" android:duration="10" />
+    <item android:drawable="@drawable/tube_56" android:duration="10" />
+    <item android:drawable="@drawable/tube_58" android:duration="10" />
+    <item android:drawable="@drawable/tube_60" android:duration="10" />
+    <item android:drawable="@drawable/tube_62" android:duration="10" />
+    <item android:drawable="@drawable/tube_64" android:duration="10" />
+    <item android:drawable="@drawable/tube_66" android:duration="10" />
+    <item android:drawable="@drawable/tube_68" android:duration="10" />
+    <item android:drawable="@drawable/tube_70" android:duration="10" />
+    <item android:drawable="@drawable/tube_72" android:duration="10" />
+    <item android:drawable="@drawable/tube_74" android:duration="10" />
+    <item android:drawable="@drawable/tube_76" android:duration="10" />
+    <item android:drawable="@drawable/tube_78" android:duration="10" />
+    <item android:drawable="@drawable/tube_80" android:duration="10" />
+    <item android:drawable="@drawable/tube_82" android:duration="10" />
+    <item android:drawable="@drawable/tube_84" android:duration="10" />
+    <item android:drawable="@drawable/tube_86" android:duration="10" />
+    <item android:drawable="@drawable/tube_88" android:duration="10" />
+    <item android:drawable="@drawable/tube_90" android:duration="10" />
+
+</animation-list>
