@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity
        MapFragment mfrag;
         HomeFragment hfrag;
     ResultFragment rfrag;
-
+PlaceListFragment pfrag;
     private TextView mDataField;
     private String[] titles;
     private int seconds=0;
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity
         mfrag=new MapFragment();
         hfrag=new HomeFragment();
         rfrag=new ResultFragment();
-
+        pfrag=new PlaceListFragment();
         titles = getResources().getStringArray(R.array.titles);
         FragmentTransaction ftransact=getFragmentManager().beginTransaction();
         ftransact.replace(R.id.container,hfrag);
@@ -225,6 +225,9 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_test) {
             ftrans.replace(R.id.container,mfrag);
+        }
+        else if (id == R.id.nav_place) {
+            ftrans.replace(R.id.container,pfrag);
         }
         ftrans.commit();
        // setActionBarTitle(position);

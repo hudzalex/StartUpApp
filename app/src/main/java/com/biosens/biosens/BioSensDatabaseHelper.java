@@ -31,8 +31,8 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
     private void updateMyDatabase(SQLiteDatabase db,int oldVersion,int newVersion){
         if(oldVersion<1){
             db.execSQL("CREATE TABLE User ("
-                    + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + "USER_UUID UUID,"
+                    + "_id INTEGER  AUTOINCREMENT,"
+                    + "USER_UUID UUID PRIMARY KEY,"
                     + "NAME TEXT,"
                     + "DESCRIPTION TEXT,"
                     + "PASSWORD TEXT,"
@@ -50,8 +50,27 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
 					+ "PrevImageId INTEGER,"
                     + "Longitude NUMERIC,"
                     + "Latitude NUMERIC,"
+                    + "Sync BOOLEAN,"
                     + "USER_UUID UUID)"
                     );
+            db.execSQL("CREATE TABLE Place ("
+                    + "_id INTEGER AUTOINCREMENT,"
+                    + "Place_UUID UUID PRIMARY KEY,"
+                    + "Longitude NUMERIC,"
+                    + "Latitude NUMERIC,"
+                    + "Name TEXT,"
+                    + "USER_UUID UUID,"
+                    + "Sync BOOLEAN,"
+                    + "PrevImageId INTEGER)"
+            );
+            db.execSQL("CREATE TABLE Culture ("
+                    + "_id INTEGER AUTOINCREMENT,"
+                    + "Cult_UUID UUID PRIMARY KEY,"
+                    + "Name TEXT,"
+                    + "USER_UUID UUID,"
+                    + "Sync BOOLEAN,"
+                    + "ImageId INTEGER)"
+            );
 
           insertUser(db, "Sasha", "Admin Acces", "1111", "admin", "biosens@gmail.com");
             insertUser(db, "Sasha1", "Admin Acces1", "1111", "admin1", "biosens1@gmail.com");
@@ -86,8 +105,33 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         userValues.put("EMAIL",email);
         db.insert("User",null,userValues);
     }
+    public static void insertPlace(SQLiteDatabase db, String name,double Longitude, double Latitude,int previmageID,String user_id){
+        ContentValues placeValues=new ContentValues();
+        UUID place_uuid = UUID.randomUUID();
+        boolean sync=false;
+        placeValues.put("Place_UUID", place_uuid.toString());
+        placeValues.put("NAME",name);
+        placeValues.put("USER_UUID",user_id);
+        placeValues.put("Longitude",Longitude);
+        placeValues.put("Latitude",Latitude);
+        placeValues.put("PrevImageId",previmageID);
+        placeValues.put("Sync",sync);
+        db.insert("Place",null,placeValues);
+    }
+    public static void insertCult(SQLiteDatabase db, String name ,int previmageID,String user_id){
+        ContentValues cultValues=new ContentValues();
+        UUID cult_uuid = UUID.randomUUID();
+        boolean sync=false;
+        cultValues.put("Cult_UUID", cult_uuid.toString());
+        cultValues.put("NAME",name);
+        cultValues.put("USER_UUID",user_id);
+        cultValues.put("ImageId",previmageID);
+        cultValues.put("Sync",sync);
+        db.insert("Culture",null,cultValues);
+    }
     public static void insertTest(SQLiteDatabase db, int result, String fileld, String date,String Culture,String Affection, String ListText,int imageID,int previmageID,double Longitude, double Latitude, String user_id){
         ContentValues testValues=new ContentValues();
+        boolean sync=false;
         testValues.put("Result",result);
         testValues.put("Field",fileld);
         testValues.put("Date", date);
@@ -99,6 +143,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         testValues.put("Longitude",Longitude);
         testValues.put("Latitude",Latitude);
         testValues.put("USER_UUID",user_id);
+        testValues.put("Sync",sync);
         db.insert("Test",null,testValues);
     }
 }
