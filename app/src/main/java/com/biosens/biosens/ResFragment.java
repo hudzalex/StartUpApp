@@ -31,18 +31,18 @@ public class ResFragment extends Fragment {
         View layout=inflater.inflate(R.layout.fragment_res, container, false);
 
         session = new SessionManagement(inflater.getContext());
-        HashMap<String, Integer> user = session.getUserDetails();
+        HashMap<String, String> user = session.getUserDetails();
 
 
-        int user_id = user.get(SessionManagement.KEY_ID);
+        String user_id = user.get(SessionManagement.KEY_ID);
         try {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Test",
                     new String[]{"_id","Field", "Culture","Affection","Date","Result"},
-                    "user_id= ?",
-                    new String[] {String.valueOf(user_id)},
+                    "USER_UUID= ?",
+                    new String[] {user_id},
                     null, null,null);
 
 

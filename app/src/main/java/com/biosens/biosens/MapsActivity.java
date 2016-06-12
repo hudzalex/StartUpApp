@@ -75,18 +75,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydneyGood = new LatLng(-44, 151);
         LatLng sydneyBad = new LatLng(latitude+1,longitude);
         session = new SessionManagement(this);
-        HashMap<String, Integer> user = session.getUserDetails();
+        HashMap<String, String> user = session.getUserDetails();
 
 
-        int user_id = user.get(SessionManagement.KEY_ID);
+        String user_id = user.get(SessionManagement.KEY_ID);
         try {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(this);
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Test",
                     new String[]{"_id","Longitude", "Latitude","Result","Date","Field"},
-                    "user_id= ?",
-                    new String[] {String.valueOf(user_id)},
+                    "USER_UUID= ?",
+                    new String[] {user_id},
                     null, null,null);
 
 

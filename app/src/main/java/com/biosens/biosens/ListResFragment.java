@@ -31,19 +31,19 @@ public class ListResFragment extends Fragment {
         View layout=inflater.inflate(R.layout.fragment_list_res, container, false);
 
         session = new SessionManagement(inflater.getContext());
-        HashMap<String, Integer> user = session.getUserDetails();
+        HashMap<String, String> user = session.getUserDetails();
 
         int row_id = this.getArguments().getInt("row_id");
 
-        int user_id = user.get(SessionManagement.KEY_ID);
+       String user_id = user.get(SessionManagement.KEY_ID);
         try {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Test",
                     new String[]{"_id","Field", "Culture","Affection","Date","Result"},
-                    "user_id= ? and rowid= ?",
-                    new String[] {String.valueOf(user_id),String.valueOf(row_id)},
+                    "USER_UUID= ? and rowid= ?",
+                    new String[] {user_id,String.valueOf(row_id)},
                     null, null,null);
 
 

@@ -38,10 +38,10 @@ public class ResultFragment extends ListFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         session = new SessionManagement(inflater.getContext());
-        HashMap<String, Integer> user = session.getUserDetails();
+        HashMap<String, String> user = session.getUserDetails();
 
 
-        int user_id = user.get(SessionManagement.KEY_ID);
+        String user_id = user.get(SessionManagement.KEY_ID);
 
         try {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
@@ -49,8 +49,8 @@ public class ResultFragment extends ListFragment{
 
             cursor = db.query("Test",
                     new String[]{"_id","Field", "Culture","Date","ListText","ImageId","PrevImageId"},
-                    "user_id= ?",
-                    new String[] {String.valueOf(user_id)},
+                    "USER_UUID= ?",
+                    new String[] {user_id},
                     null, null,null);
 
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),

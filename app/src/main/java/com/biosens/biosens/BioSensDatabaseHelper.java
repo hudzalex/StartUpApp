@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -14,6 +15,7 @@ import java.util.Date;
 public class BioSensDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME="biosens";
     private static final int DB_VERSION=1;
+
     BioSensDatabaseHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -30,6 +32,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         if(oldVersion<1){
             db.execSQL("CREATE TABLE User ("
                     + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "USER_UUID UUID,"
                     + "NAME TEXT,"
                     + "DESCRIPTION TEXT,"
                     + "PASSWORD TEXT,"
@@ -47,8 +50,8 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
 					+ "PrevImageId INTEGER,"
                     + "Longitude NUMERIC,"
                     + "Latitude NUMERIC,"
-                    + "user_id INTEGER,"
-                    + "FOREIGN KEY (user_id) REFERENCES User(_id))");
+                    + "USER_UUID UUID)"
+                    );
 
           insertUser(db, "Sasha", "Admin Acces", "1111", "admin", "biosens@gmail.com");
             insertUser(db, "Sasha1", "Admin Acces1", "1111", "admin1", "biosens1@gmail.com");
@@ -74,6 +77,8 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
     }
     public static void insertUser(SQLiteDatabase db, String name, String description, String password,String login,String email){
         ContentValues userValues=new ContentValues();
+        UUID user_uuid = UUID.randomUUID();
+        userValues.put("USER_UUID", user_uuid.toString());
         userValues.put("NAME",name);
         userValues.put("DESCRIPTION",description);
         userValues.put("PASSWORD",password);
@@ -81,7 +86,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         userValues.put("EMAIL",email);
         db.insert("User",null,userValues);
     }
-    public static void insertTest(SQLiteDatabase db, int result, String fileld, String date,String Culture,String Affection, String ListText,int imageID,int previmageID,double Longitude, double Latitude, int user_id){
+    public static void insertTest(SQLiteDatabase db, int result, String fileld, String date,String Culture,String Affection, String ListText,int imageID,int previmageID,double Longitude, double Latitude, String user_id){
         ContentValues testValues=new ContentValues();
         testValues.put("Result",result);
         testValues.put("Field",fileld);
@@ -93,7 +98,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
 		testValues.put("PrevImageId",previmageID);
         testValues.put("Longitude",Longitude);
         testValues.put("Latitude",Latitude);
-        testValues.put("user_id",user_id);
+        testValues.put("USER_UUID",user_id);
         db.insert("Test",null,testValues);
     }
 }

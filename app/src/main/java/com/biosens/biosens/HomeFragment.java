@@ -45,12 +45,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private SQLiteDatabase db;
     SessionManagement session;
     SQLiteOpenHelper biosensDatabaseHelper;
-    private  int user_id,rez,ImageId,PrevImageId, inp;
+    private  int rez,ImageId,PrevImageId, inp;
     EditText dateEditText;
     WaitFragment wfrag;
     private LocationManager locationManager;
     private double lat,lon;
-    private String ListText;
+    private String ListText, user_id;
 
     final Random random = new Random();
     public interface onSomeEventListener {
@@ -91,7 +91,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         db = biosensDatabaseHelper.getWritableDatabase();
         session = new SessionManagement(inflater.getContext());
 
-        HashMap<String, Integer> user = session.getUserDetails();
+        HashMap<String, String> user = session.getUserDetails();
         user_id = user.get(SessionManagement.KEY_ID);
 
         locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
@@ -168,18 +168,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         }
 
-       HashMap<String, Integer> user = session.getUserDetails();
 
-       
-
-        int user_id = user.get(SessionManagement.KEY_ID);
 		 try {
 
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Test",
                     new String[]{"_id","Field", "Culture","Affection","Date","Result"},
-                    "user_id= ?",
+                    "USER_UUID= ?",
                     new String[] {String.valueOf(user_id)},
                     null, null,null);
 

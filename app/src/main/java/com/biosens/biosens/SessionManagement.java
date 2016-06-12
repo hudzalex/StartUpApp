@@ -40,12 +40,12 @@ public class SessionManagement {
     /**
      * Create login session
      * */
-    public void createLoginSession(int id){
+    public void createLoginSession(String id){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
         // Storing id in pref
-        editor.putInt(KEY_ID, id);
+        editor.putString(KEY_ID, id);
 
 
         editor.commit();
@@ -56,10 +56,10 @@ public class SessionManagement {
     /**
      * Get stored session data
      * */
-    public HashMap<String, Integer> getUserDetails(){
-        HashMap<String, Integer> user = new HashMap<String, Integer>();
+    public HashMap<String, String> getUserDetails(){
+        HashMap<String, String> user = new HashMap<String, String>();
         // user name
-        user.put(KEY_ID, pref.getInt(KEY_ID, 0));
+        user.put(KEY_ID, pref.getString(KEY_ID, ""));
 
 
 

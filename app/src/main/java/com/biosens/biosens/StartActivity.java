@@ -54,7 +54,7 @@ public class StartActivity extends AppCompatActivity {
             biosensDatabaseHelper = new BioSensDatabaseHelper(this);
             db = biosensDatabaseHelper.getReadableDatabase();
             cursor = db.query("User",
-                    new String[] {"_id"},
+                    new String[] {"USER_UUID"},
                     "LOGIN= ? AND PASSWORD= ?",
                     new String[] {username,password},
                     null, null,null);
@@ -74,7 +74,7 @@ public class StartActivity extends AppCompatActivity {
                 // Creating user login session
                 // For testing i am stroing name, email as follow
                 // Use user real data
-                session.createLoginSession(cursor.getInt(0));
+                session.createLoginSession(cursor.getString(0));
 
                 // Staring MainActivity
                 Intent i = new Intent(StartActivity.this, MainActivity.class);
