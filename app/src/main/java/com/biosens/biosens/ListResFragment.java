@@ -41,7 +41,7 @@ public class ListResFragment extends Fragment {
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Test",
-                    new String[]{"_id","Field", "Culture","Affection","Date","Result"},
+                    new String[]{"Field", "Culture","Affection","Date","Result"},
                     "USER_UUID= ? and rowid= ?",
                     new String[] {user_id,String.valueOf(row_id)},
                     null, null,null);
@@ -61,11 +61,11 @@ public class ListResFragment extends Fragment {
         ImageView photo = (ImageView)layout.findViewById(R.id.imageView);
 
 
-        field.setText(cursor.getString(1));
-        date.setText(cursor.getString(4));
-        cult.setText(cursor.getString(2));
-        affect.setText(cursor.getString(3));
-        rez=cursor.getInt(5);
+        field.setText(cursor.getString(0));
+        date.setText(cursor.getString(3));
+        cult.setText(cursor.getString(1));
+        affect.setText(cursor.getString(2));
+        rez=cursor.getInt(4);
         if(rez==0){
             textrez.setText("Toxins are not found");
             photo.setImageResource(R.drawable.positive);

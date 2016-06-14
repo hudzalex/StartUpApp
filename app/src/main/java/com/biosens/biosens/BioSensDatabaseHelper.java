@@ -31,7 +31,6 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
     private void updateMyDatabase(SQLiteDatabase db,int oldVersion,int newVersion){
         if(oldVersion<1){
             db.execSQL("CREATE TABLE User ("
-                    + "_id INTEGER  AUTOINCREMENT,"
                     + "USER_UUID UUID PRIMARY KEY,"
                     + "NAME TEXT,"
                     + "DESCRIPTION TEXT,"
@@ -39,7 +38,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "LOGIN TEXT,"
                     + "EMAIl TEXT)");
             db.execSQL("CREATE TABLE Test ("
-                    + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "TEST_UUID UUID PRIMARY KEY,"
                     + "Result INTEGER,"
                     + "Field TEXT,"
                     + "Date TEXT,"
@@ -54,7 +53,6 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "USER_UUID UUID)"
                     );
             db.execSQL("CREATE TABLE Place ("
-                    + "_id INTEGER AUTOINCREMENT,"
                     + "Place_UUID UUID PRIMARY KEY,"
                     + "Longitude NUMERIC,"
                     + "Latitude NUMERIC,"
@@ -64,7 +62,6 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "PrevImageId INTEGER)"
             );
             db.execSQL("CREATE TABLE Culture ("
-                    + "_id INTEGER AUTOINCREMENT,"
                     + "Cult_UUID UUID PRIMARY KEY,"
                     + "Name TEXT,"
                     + "USER_UUID UUID,"
@@ -131,7 +128,9 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
     }
     public static void insertTest(SQLiteDatabase db, int result, String fileld, String date,String Culture,String Affection, String ListText,int imageID,int previmageID,double Longitude, double Latitude, String user_id){
         ContentValues testValues=new ContentValues();
+        UUID test_uuid = UUID.randomUUID();
         boolean sync=false;
+        testValues.put("TEST_UUID", test_uuid.toString());
         testValues.put("Result",result);
         testValues.put("Field",fileld);
         testValues.put("Date", date);

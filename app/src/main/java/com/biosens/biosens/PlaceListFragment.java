@@ -42,7 +42,7 @@ public class PlaceListFragment extends ListFragment {
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Place",
-                    new String[]{"_id","Name","PrevImageId","Place_UUID"},
+                    new String[]{"Name","PrevImageId","Place_UUID"},
                     "USER_UUID= ?",
                     new String[] {user_id},
                     null, null,null);

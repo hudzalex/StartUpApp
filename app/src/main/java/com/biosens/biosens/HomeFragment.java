@@ -174,7 +174,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Test",
-                    new String[]{"_id","Field", "Culture","Affection","Date","Result"},
+                    new String[]{"Field", "Culture","Affection","Date","Result"},
                     "USER_UUID= ?",
                     new String[] {String.valueOf(user_id)},
                     null, null,null);

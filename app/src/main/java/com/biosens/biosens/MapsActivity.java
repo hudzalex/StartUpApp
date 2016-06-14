@@ -84,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Test",
-                    new String[]{"_id","Longitude", "Latitude","Result","Date","Field"},
+                    new String[]{"Longitude", "Latitude","Result","Date","Field"},
                     "USER_UUID= ?",
                     new String[] {user_id},
                     null, null,null);
@@ -97,15 +97,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
             do {
-                double longlat = cursor.getDouble(1);
-                double lat = cursor.getDouble(2);
+                double longlat = cursor.getDouble(0);
+                double lat = cursor.getDouble(1);
                 LatLng rezPositions = new LatLng(lat,longlat);
                 if(cursor.getInt(3)==0){
-                    mMap.addMarker(new MarkerOptions().position(rezPositions ).title("Toxin are not found | Date "+cursor.getString(4)+" | Field "+cursor.getString(5)).icon(
+                    mMap.addMarker(new MarkerOptions().position(rezPositions ).title("Toxin are not found | Date "+cursor.getString(3)+" | Field "+cursor.getString(4)).icon(
                         BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));}
                 else{
-                    mMap.addMarker(new MarkerOptions().position(rezPositions ).title("Toxin are found | Date"+cursor.getString(4)+" | Field "+cursor.getString(5)).icon(
+                    mMap.addMarker(new MarkerOptions().position(rezPositions ).title("Toxin are found | Date"+cursor.getString(3)+" | Field "+cursor.getString(4)).icon(
                             BitmapDescriptorFactory
                                     .defaultMarker()));
                 }
