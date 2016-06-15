@@ -53,7 +53,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity
         implements HomeFragment.onSomeEventListener,NavigationView.OnNavigationItemSelectedListener {
        MapFragment mfrag;
@@ -143,17 +150,14 @@ PlaceListFragment pfrag;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //-------------------------------------------------------------------------
-         /*Post data*/
+               /*Post data*/
         String url = "http://httpbin.org/post";
         RequestQueue queue = Volley.newRequestQueue(this);
         Map<String, String> jsonParams = new HashMap<String, String>();
-
         jsonParams.put("email", "user@gmail.com");
         jsonParams.put("username", "user");
         jsonParams.put("password", "pass");
-
         JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, url,
-
                 new JSONObject(jsonParams),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -169,10 +173,13 @@ PlaceListFragment pfrag;
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
+               // headers.put("Content-Type", "application/json; charset=utf-8");
+              //  headers.put("User-agent", System.getProperty("http.agent"));
                 return headers;
             }
+        };
+        queue.add(postRequest);
+        //--------------------------------------------------------------------------
         };
         queue.add(postRequest);
 //--------------------------------------------------------------------------
