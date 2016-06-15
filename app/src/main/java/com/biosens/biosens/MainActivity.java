@@ -180,9 +180,7 @@ PlaceListFragment pfrag;
         };
         queue.add(postRequest);
         //--------------------------------------------------------------------------
-        };
-        queue.add(postRequest);
-//--------------------------------------------------------------------------
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -205,7 +203,7 @@ PlaceListFragment pfrag;
 
 
        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-//
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         mfrag=new MapFragment();
