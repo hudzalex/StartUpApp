@@ -53,9 +53,9 @@ public class StartActivity extends AppCompatActivity {
         try {
             biosensDatabaseHelper = new BioSensDatabaseHelper(this);
             db = biosensDatabaseHelper.getReadableDatabase();
-            cursor = db.query("User",
-                    new String[] {"USER_UUID"},
-                    "LOGIN= ? AND PASSWORD= ?",
+            cursor = db.query("user_account",
+                    new String[] {"_id"},
+                    "name= ? AND password_hash= ?",
                     new String[] {username,password},
                     null, null,null);
 //Код работы с курсором

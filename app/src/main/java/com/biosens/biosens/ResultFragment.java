@@ -48,7 +48,7 @@ public class ResultFragment extends ListFragment{
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("Test",
-                    new String[]{"TEST_UUID","Field", "Culture","Date","ListText","ImageId","PrevImageId"},
+                    new String[]{"_id","Field", "Culture","Date","ListText","ImageId","PrevImageId"},
                     "USER_UUID= ?",
                     new String[] {user_id},
                     null, null,null);
@@ -73,11 +73,11 @@ public class ResultFragment extends ListFragment{
                                 View v,
                                 int position,
                                 long id) {
-      //  Cursor cursorList = (Cursor) l.getItemAtPosition(position);
-       // int Id = Integer.valueOf(cursorList.getString(cursorList.getColumnIndexOrThrow("_id")));
+       Cursor cursorList = (Cursor) l.getItemAtPosition(position);
+        String Id = cursorList.getString(cursorList.getColumnIndexOrThrow("_id"));
         Bundle bundle = new Bundle();
 
-        bundle.putInt("row_id", position);
+        bundle.putString("row_id", Id);
         ListResFragment fragInfo = new  ListResFragment();
         fragInfo.setArguments(bundle);
         FragmentTransaction ftransact=getFragmentManager().beginTransaction();

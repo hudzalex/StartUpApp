@@ -33,7 +33,7 @@ public class ListResFragment extends Fragment {
         session = new SessionManagement(inflater.getContext());
         HashMap<String, String> user = session.getUserDetails();
 
-        int row_id = this.getArguments().getInt("row_id");
+        String row_id = this.getArguments().getString("row_id");
 
        String user_id = user.get(SessionManagement.KEY_ID);
         try {
@@ -42,8 +42,8 @@ public class ListResFragment extends Fragment {
 
             cursor = db.query("Test",
                     new String[]{"Field", "Culture","Affection","Date","Result"},
-                    "USER_UUID= ? and rowid= ?",
-                    new String[] {user_id,String.valueOf(row_id)},
+                    "USER_UUID= ? and _id= ?",
+                    new String[] {user_id, row_id},
                     null, null,null);
 
 

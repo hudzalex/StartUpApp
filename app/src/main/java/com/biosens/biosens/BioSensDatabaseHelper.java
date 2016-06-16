@@ -30,15 +30,12 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
     }
     private void updateMyDatabase(SQLiteDatabase db,int oldVersion,int newVersion){
         if(oldVersion<1){
-            db.execSQL("CREATE TABLE User ("
-                    + "USER_UUID UUID PRIMARY KEY,"
-                    + "NAME TEXT,"
-                    + "DESCRIPTION TEXT,"
-                    + "PASSWORD TEXT,"
-                    + "LOGIN TEXT,"
-                    + "EMAIl TEXT)");
+            db.execSQL("CREATE TABLE user_account ("
+                    + "_id UUID PRIMARY KEY NOT NULL,"
+                    + "name TEXT NOT NULL,"
+                    + "password_hash TEXT NOT NULL)");
             db.execSQL("CREATE TABLE Test ("
-                    + "TEST_UUID UUID PRIMARY KEY,"
+                    + "_id UUID PRIMARY KEY,"
                     + "Result INTEGER,"
                     + "Field TEXT,"
                     + "Date TEXT,"
@@ -52,26 +49,26 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "Sync BOOLEAN,"
                     + "USER_UUID UUID)"
                     );
-            db.execSQL("CREATE TABLE Place ("
-                    + "Place_UUID UUID PRIMARY KEY,"
-                    + "Longitude NUMERIC,"
-                    + "Latitude NUMERIC,"
-                    + "Name TEXT,"
-                    + "USER_UUID UUID,"
-                    + "Sync BOOLEAN,"
-                    + "PrevImageId INTEGER)"
+            db.execSQL("CREATE TABLE place ("
+                    + "_id UUID PRIMARY KEY NOT NULL,"
+                    + "name TEXT NOT NULL,"
+                    + "longitude FLOAT(53) NOT NULL,"
+                    + "latitude FLOAT(53) NOT NULL,"
+                    + "user_id UUID NOT NULL,"
+                    + "photo INTEGER NULL,"
+                    + "sync BOOLEAN NOT NULL)"
             );
-            db.execSQL("CREATE TABLE Culture ("
-                    + "Cult_UUID UUID PRIMARY KEY,"
-                    + "Name TEXT,"
-                    + "USER_UUID UUID,"
-                    + "Sync BOOLEAN,"
-                    + "ImageId INTEGER)"
+            db.execSQL("CREATE TABLE culture ("
+                    + "_id UUID PRIMARY KEY NOT NULL,"
+                    + "name TEXT NOT NULL,"
+                    + "user_id UUID NOT NULL,"
+                    + "photo INTEGER NULL,"
+                    + "sync BOOLEAN NOT NULL)"
             );
 
-          insertUser(db, "Sasha", "Admin Acces", "1111", "admin", "biosens@gmail.com");
-            insertUser(db, "Sasha1", "Admin Acces1", "1111", "admin1", "biosens1@gmail.com");
-            insertUser(db, "Sasha2", "Admin Acces2", "1111", "admin2", "biosens2@gmail.com");
+          insertUser(db, "admin", "1111");
+            insertUser(db, "admin2", "1111");
+            insertUser(db, "admin3", "1111");
           /*    insertTest(db, 0, "поле", "12.12.2014", "So", "T2", 0, 0, 1);
             insertTest(db, 1, "поле1", "12.12.2015", "So", "T2", 1, 0, 1);
               insertDrink(db,"Cappuccino","Espresso, hot milk, and a steamed milk foam",R.drawable.cappuccino);
@@ -91,46 +88,43 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
 
         }
     }
-    public static void insertUser(SQLiteDatabase db, String name, String description, String password,String login,String email){
+    public static void insertUser(SQLiteDatabase db, String name, String password){
         ContentValues userValues=new ContentValues();
         UUID user_uuid = UUID.randomUUID();
-        userValues.put("USER_UUID", user_uuid.toString());
-        userValues.put("NAME",name);
-        userValues.put("DESCRIPTION",description);
-        userValues.put("PASSWORD",password);
-        userValues.put("LOGIN",login);
-        userValues.put("EMAIL",email);
-        db.insert("User",null,userValues);
+        userValues.put("_id", user_uuid.toString());
+        userValues.put("name",name);
+        userValues.put("password_hash",password);
+        db.insert("user_account",null,userValues);
     }
-    public static void insertPlace(SQLiteDatabase db, String name,double Longitude, double Latitude,int previmageID,String user_id){
+    public static void insertPlace(SQLiteDatabase db, String name,double Longitude, double Latitude,String user_id, int photoID){
         ContentValues placeValues=new ContentValues();
         UUID place_uuid = UUID.randomUUID();
         boolean sync=false;
-        placeValues.put("Place_UUID", place_uuid.toString());
-        placeValues.put("NAME",name);
-        placeValues.put("USER_UUID",user_id);
-        placeValues.put("Longitude",Longitude);
-        placeValues.put("Latitude",Latitude);
-        placeValues.put("PrevImageId",previmageID);
-        placeValues.put("Sync",sync);
-        db.insert("Place",null,placeValues);
+        placeValues.put("_id", place_uuid.toString());
+        placeValues.put("name",name);
+        placeValues.put("longitude",Longitude);
+        placeValues.put("latitude",Latitude);
+        placeValues.put("user_id",user_id);
+        placeValues.put("photo",photoID);
+        placeValues.put("sync",sync);
+        db.insert("place",null,placeValues);
     }
-    public static void insertCult(SQLiteDatabase db, String name ,int previmageID,String user_id){
+    public static void insertCult(SQLiteDatabase db, String name ,String user_id, int photoID){
         ContentValues cultValues=new ContentValues();
         UUID cult_uuid = UUID.randomUUID();
         boolean sync=false;
-        cultValues.put("Cult_UUID", cult_uuid.toString());
-        cultValues.put("NAME",name);
-        cultValues.put("USER_UUID",user_id);
-        cultValues.put("ImageId",previmageID);
-        cultValues.put("Sync",sync);
-        db.insert("Culture",null,cultValues);
+        cultValues.put("_id", cult_uuid.toString());
+        cultValues.put("name",name);
+        cultValues.put("user_id",user_id);
+        cultValues.put("photo",photoID);
+        cultValues.put("sync",sync);
+        db.insert("culture",null,cultValues);
     }
     public static void insertTest(SQLiteDatabase db, int result, String fileld, String date,String Culture,String Affection, String ListText,int imageID,int previmageID,double Longitude, double Latitude, String user_id){
         ContentValues testValues=new ContentValues();
         UUID test_uuid = UUID.randomUUID();
         boolean sync=false;
-        testValues.put("TEST_UUID", test_uuid.toString());
+        testValues.put("_id", test_uuid.toString());
         testValues.put("Result",result);
         testValues.put("Field",fileld);
         testValues.put("Date", date);
