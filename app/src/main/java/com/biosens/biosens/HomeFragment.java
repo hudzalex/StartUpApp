@@ -98,6 +98,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Enable GPS", Toast.LENGTH_SHORT);
+            toast.show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 
         }
@@ -214,6 +216,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
         BioSensDatabaseHelper.insertTest(db, rez, objectEditText.getText().toString(), data, cultureEditText.getText().toString(), testEditText.getText().toString(),ListText ,ImageId,PrevImageId, lon, lat, user_id);
+        BioSensDatabaseHelper.insertPlace(db, cultureEditText.getText().toString(), lon, lat, user_id,PrevImageId );
         FragmentTransaction ftranssct=getFragmentManager().beginTransaction();
         wfrag=new WaitFragment();
         ftranssct.replace(R.id.container, wfrag);

@@ -41,16 +41,16 @@ public class PlaceListFragment extends ListFragment {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
             db = biosensDatabaseHelper.getReadableDatabase();
 
-            cursor = db.query("Place",
-                    new String[]{"Name","PrevImageId","Place_UUID"},
-                    "USER_UUID= ?",
+            cursor = db.query("place",
+                    new String[]{"name","photo","_id"},
+                    "user_id= ?",
                     new String[] {user_id},
                     null, null,null);
 
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
-                    R.layout.list_layout,
+                    R.layout.fragment_place_list,
                     cursor,
-                    new String[]{"Field","PrevImageId"},
+                    new String[]{"name","photo"},
                     new int[]{R.id.place_name,R.id.place_image},
                     0);
             setListAdapter(listAdapter);

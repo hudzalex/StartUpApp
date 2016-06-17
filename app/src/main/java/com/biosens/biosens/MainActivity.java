@@ -149,6 +149,7 @@ PlaceListFragment pfrag;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startService(new Intent(MainActivity.this, HttpService.class));
 //-------------------------------------------------------------------------
                /*Post data*/
         String url = "http://httpbin.org/post";
@@ -285,16 +286,16 @@ PlaceListFragment pfrag;
         }
         getActionBar().setTitle(title);
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-//        if (mBluetoothLeService != null) {
-//            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-//            Log.d(TAG, "Connect request result=" + result);
-//        }
-//
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        if (mBluetoothLeService != null) {
+            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+           Log.d(TAG, "Connect request result=" + result);
+        }
+
+    }
 
     @Override
     protected void onPause() {
