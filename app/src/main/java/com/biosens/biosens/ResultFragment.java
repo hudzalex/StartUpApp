@@ -51,7 +51,7 @@ public class ResultFragment extends ListFragment{
                     new String[]{"_id","Field", "Culture","Date","ListText","ImageId","PrevImageId"},
                     "USER_UUID= ?",
                     new String[] {user_id},
-                    null, null,null);
+                    null, null,"rowid DESC");
 
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                     R.layout.list_layout,

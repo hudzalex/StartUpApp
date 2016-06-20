@@ -149,31 +149,8 @@ PlaceListFragment pfrag;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(MainActivity.this, HttpService.class));
-//-------------------------------------------------------------------------
-               /*Post data*/
-        String url = "http://httpbin.org/post";
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Map<String, String> jsonParams = new HashMap<String, String>();
-        jsonParams.put("email", "user@gmail.com");
-        jsonParams.put("username", "user");
-        jsonParams.put("password", "pass");
-        JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, url,
-                new JSONObject(jsonParams),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //   Handle Error
-                    }
-                });
-        queue.add(postRequest);
-        //--------------------------------------------------------------------------
 
+        startService(new Intent(MainActivity.this, HttpService.class));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -308,7 +285,10 @@ PlaceListFragment pfrag;
         super.onDestroy();
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
+        stopService(new Intent(MainActivity.this, HttpService.class));
     }
+
+
     private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {
             @Override

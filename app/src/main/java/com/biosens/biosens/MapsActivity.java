@@ -35,8 +35,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Cursor cursor;
     SessionManagement session;
     Location location;
-    double latitude;
-    double longitude;
+    double latitude=0;
+    double longitude=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

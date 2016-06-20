@@ -70,6 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,7 +98,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         user_id = user.get(SessionManagement.KEY_ID);
 
         locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        while (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Enable GPS", Toast.LENGTH_SHORT);
             toast.show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
@@ -160,6 +161,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 
     }
+
     @Override
     public void onClick(View v) {
     // rez = someEventListener.someEvent();
