@@ -64,9 +64,10 @@ public class HttpService extends Service {
 
     private class mainTask extends TimerTask
     {
+        int currentTable = 0;
+
         public void run()
         {
-
 
             try {
                 SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(getApplicationContext());
@@ -81,17 +82,19 @@ public class HttpService extends Service {
                 cursor.moveToFirst();
 
                 if (!cursor.isAfterLast()) {
-                    do {
+//                    do {
                         String s = cursor.getString(1);
                         String a=cursor.getString(6);
                         String url = "http://httpbin.org/post";
                         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                         Map<String, String> jsonParams = new HashMap<String, String>();
-                        jsonParams.put("id", cursor.getString(0));
+
+                        String id = cursor.getString(0);
+                        jsonParams.put("id", id);
                         jsonParams.put("name", cursor.getString(1));
                         jsonParams.put("longitude", String.valueOf(cursor.getDouble(2)));
                         jsonParams.put("latitude", String.valueOf(cursor.getDouble(3)));
-                        jsonParams.put("userid",cursor.getString(4));
+                        jsonParams.put("userId",cursor.getString(4));
                         jsonParams.put("photo",String.valueOf(cursor.getInt(5)));
 
                         JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, url,
@@ -99,7 +102,7 @@ public class HttpService extends Service {
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
-                                        Log.d("Response", String.valueOf(response));
+                                        Log.d("HttpService", "Response " + String.valueOf(response));
                                     }
                                 },
                                 new Response.ErrorListener() {
@@ -111,7 +114,9 @@ public class HttpService extends Service {
                         queue.add(postRequest);
 
                         toastHandler.sendEmptyMessage(0);
-                    } while (cursor.moveToNext());
+//                    } while (cursor.moveToNext());
+                } else {
+
                 }
 
             } catch(SQLiteException e) {

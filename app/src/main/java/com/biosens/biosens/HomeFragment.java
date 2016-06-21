@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.UUID;
 
 
@@ -98,10 +99,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         HashMap<String, String> user = session.getUserDetails();
         user_id = user.get(SessionManagement.KEY_ID);
-        BioSensDatabaseHelper.insertCult(db,"Пшеница",R.drawable.field_1);
-        BioSensDatabaseHelper.insertPlace(db, "Поле 19", 0.0, 0.0,R.drawable.field_1 );
-        objectEditText = (EditText) getActivity().findViewById(R.id.editTextField);
-        cultureEditText = (EditText) getActivity().findViewById(R.id.editTextCulture);
+
+        objectEditText = (EditText) layout.findViewById(R.id.editTextField);
+        cultureEditText = (EditText) layout.findViewById(R.id.editTextCulture);
         try {
 
             db = biosensDatabaseHelper.getReadableDatabase();
@@ -118,8 +118,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             toast.show();
         }
 
-        objectEditText.setText(cursor.getString(1));
-       FieldId=cursor.getString(0);
+        String[] columns = cursor.getColumnNames();
+
+        //for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+//            int nameIndex = cursor.getColumnIndex("name");
+//            int idIndex = cursor.getColumnIndex("_id");
+
+            cursor.moveToFirst();
+
+            objectEditText.setText(cursor.getString(1));
+            FieldId=cursor.getString(0);
+//        }
+
         cursor.close();
         try {
 
@@ -137,9 +147,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             toast.show();
         }
 
+        cursor.moveToFirst();
         cultureEditText.setText(cursor.getString(1));
         CultureId=cursor.getString(0);
         cursor.close();
+
         locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Enable GPS", Toast.LENGTH_SHORT);
@@ -147,17 +159,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 
         }
+
         if (ContextCompat.checkSelfPermission(inflater.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED)
+        {
+
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     1000 * 10, 10, locationListener);
-        locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
-                locationListener);
+
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
+                    locationListener);
+        }
+
         // Inflate the layout for this fragment
         someEventListener.someEvent();
         return layout;
     }
+
+    private static final int INITIAL_REQUEST=1337;
+    private static final int CAMERA_REQUEST=INITIAL_REQUEST+1;
+    private static final int CONTACTS_REQUEST=INITIAL_REQUEST+2;
+    private static final int LOCATION_REQUEST=INITIAL_REQUEST+3;
 
     private LocationListener locationListener = new LocationListener() {
 
@@ -249,31 +272,31 @@ boolean haveToxin=false;
 		cursor.close();
 
         EditText testEditText = (EditText) getActivity().findViewById(R.id.editTextToxity);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
-
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        dateFormat.setTimeZone(utc);
 
         Calendar c = Calendar.getInstance();
         String data=dateFormat.format(c.getTime());
 
-
-        BioSensDatabaseHelper.insertResearch(db,FieldId, data, data, CultureId, user_id,haveToxin ,rez,"Analys");
-        try {
-
-            db = biosensDatabaseHelper.getReadableDatabase();
-
-            cursor = db.query("research",
-                    new String[]{"_id"},
-                    null,
-                    null,
-                    null, null,null);
-
-
-        } catch(SQLiteException e) {
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Database unavailable", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-        cursor.moveToLast();
-        BioSensDatabaseHelper.insertMeasurement(db,cursor.getString(0), data, data, testEditText.getText().toString(),rez,lon, lat, user_id,"Analys");
+        UUID researchId = BioSensDatabaseHelper.insertResearch(db,FieldId, data, data, CultureId, user_id,haveToxin ,rez,"Analys");
+//        try {
+//
+//            db = biosensDatabaseHelper.getReadableDatabase();
+//
+//            cursor = db.query("research",
+//                    new String[]{"_id"},
+//                    null,
+//                    null,
+//                    null, null,null);
+//
+//
+//        } catch(SQLiteException e) {
+//            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Database unavailable", Toast.LENGTH_SHORT);
+//            toast.show();
+//        }
+//        cursor.moveToLast();
+        BioSensDatabaseHelper.insertMeasurement(db,researchId.toString(), data, data, testEditText.getText().toString(),rez,lon, lat, user_id,"Analys");
         BioSensDatabaseHelper.insertTest(db, rez, objectEditText.getText().toString(), data, cultureEditText.getText().toString(), testEditText.getText().toString(),ListText ,ImageId,PrevImageId, lon, lat, user_id);
        // BioSensDatabaseHelper.insertPlace(db, cultureEditText.getText().toString(), lon, lat, user_id,PrevImageId );
         FragmentTransaction ftranssct=getFragmentManager().beginTransaction();

@@ -155,7 +155,12 @@ PlaceListFragment pfrag;
         setSupportActionBar(toolbar);
 
         session = new SessionManagement(this);
-        session.checkLogin();
+        if (!session.checkLogin())
+        {
+            return;
+        }
+
+
         Toast.makeText(this, "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
         mDataField=(TextView)findViewById(R.id.mDataField);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

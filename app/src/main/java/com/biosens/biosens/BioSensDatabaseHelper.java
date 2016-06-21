@@ -31,11 +31,12 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
     private void updateMyDatabase(SQLiteDatabase db,int oldVersion,int newVersion){
         if(oldVersion<1){
             db.execSQL("CREATE TABLE user_account ("
-                    + "_id UUID PRIMARY KEY NOT NULL,"
+                    + "_id TEXT PRIMARY KEY NOT NULL,"
                     + "name TEXT NOT NULL,"
                     + "password_hash TEXT NOT NULL)");
+
             db.execSQL("CREATE TABLE Test ("
-                    + "_id UUID PRIMARY KEY,"
+                    + "_id TEXT PRIMARY KEY,"
                     + "Result INTEGER,"
                     + "Field TEXT,"
                     + "Date TEXT,"
@@ -47,47 +48,47 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "Longitude NUMERIC,"
                     + "Latitude NUMERIC,"
                     + "Sync BOOLEAN,"
-                    + "USER_UUID UUID)"
+                    + "USER_UUID TEXT)"
                     );
             db.execSQL("CREATE TABLE research ("
-                    + "_id UUID PRIMARY KEY NOT NULL,"
-                    + "place_id UUID NOT NULL,"
-                    + "start_time TIMESTAMP NOT NULL,"
-                    + "end_time TIMESTAMP NOT NULL,"
-                    + "culture_id UUID NOT NULL,"
-                    + "user_id UUID NOT NULL,"
+                    + "_id TEXT PRIMARY KEY NOT NULL,"
+                    + "place_id TEXT NOT NULL,"
+                    + "start_time TEXT NOT NULL,"
+                    + "end_time TEXT NOT NULL,"
+                    + "culture_id TEXT NOT NULL,"
+                    + "user_id TEXT NOT NULL,"
                     + "have_toxin BOOLEAN NOT NULL,"
-                    + "toxin_level FLOAT(53) NOT NULL,"
+                    + "toxin_level NUMERIC NOT NULL,"
                     + "description TEXT NOT NULL,"
                     + "sync BOOLEAN NOT NULL)"
 
             );
             db.execSQL("CREATE TABLE measurement ("
-                    + "_id UUID PRIMARY KEY NOT NULL,"
-                    + "research_id UUID NOT NULL,"
-                    + "start_time TIMESTAMP NOT NULL,"
-                    + "end_time TIMESTAMP NOT NULL,"
+                    + "_id TEXT PRIMARY KEY NOT NULL,"
+                    + "research_id TEXT NOT NULL,"
+                    + "start_time TEXT NOT NULL,"
+                    + "end_time TEXT NOT NULL,"
                     + "unit TEXT NOT NULL,"
-                    + "value FLOAT(53) NOT NULL,"
-                    + "longitude FLOAT(53) NOT NULL,"
-                    + "latitude FLOAT(53) NOT NULL,"
-                    + "user_id UUID NOT NULL,"
+                    + "value NUMERIC NOT NULL,"
+                    + "longitude NUMERIC NOT NULL,"
+                    + "latitude NUMERIC NOT NULL,"
+                    + "user_id TEXT NOT NULL,"
                     + "description TEXT NOT NULL,"
                     + "sync BOOLEAN NOT NULL)"
             );
             db.execSQL("CREATE TABLE place ("
-                    + "_id UUID PRIMARY KEY NOT NULL,"
+                    + "_id TEXT PRIMARY KEY NOT NULL,"
                     + "name TEXT NOT NULL,"
-                    + "longitude FLOAT(53) NOT NULL,"
-                    + "latitude FLOAT(53) NOT NULL,"
-                    + "user_id UUID NOT NULL,"
+                    + "longitude NUMERIC NOT NULL,"
+                    + "latitude NUMERIC NOT NULL,"
+                    + "user_id TEXT NOT NULL,"
                     + "photo INTEGER NULL,"
                     + "sync BOOLEAN NOT NULL)"
             );
             db.execSQL("CREATE TABLE culture ("
-                    + "_id UUID PRIMARY KEY NOT NULL,"
+                    + "_id TEXT PRIMARY KEY NOT NULL,"
                     + "name TEXT NOT NULL,"
-                    + "user_id UUID NOT NULL,"
+                    + "user_id TEXT NOT NULL,"
                     + "photo INTEGER NULL,"
                     + "sync BOOLEAN NOT NULL)"
             );
@@ -136,7 +137,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         placeValues.put("user_id",user_id.toString());
         placeValues.put("photo",photoID);
         placeValues.put("sync",sync);
-        db.insert("place",null,placeValues);
+        long rowid = db.insert("place",null,placeValues);
     }
     public static void insertCult(SQLiteDatabase db, String name , int photoID){
         ContentValues cultValues=new ContentValues();
@@ -148,9 +149,9 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         cultValues.put("user_id",user_id.toString());
         cultValues.put("photo",photoID);
         cultValues.put("sync",sync);
-        db.insert("culture",null,cultValues);
+        long rowid = db.insert("culture",null,cultValues);
     }
-    public static void insertResearch(SQLiteDatabase db, String place_id, String startTime, String endTime,String culture_id,String user_id, boolean haveToxin,double toxinLevel,String description){
+    public static UUID insertResearch(SQLiteDatabase db, String place_id, String startTime, String endTime,String culture_id,String user_id, boolean haveToxin,double toxinLevel,String description){
         ContentValues researchValues=new ContentValues();
         UUID research_uuid = UUID.randomUUID();
         boolean sync=false;
@@ -165,6 +166,8 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         researchValues.put("description",description);
         researchValues.put("sync",sync);
         db.insert("research",null,researchValues);
+
+        return research_uuid;
     }
     public static void insertMeasurement(SQLiteDatabase db, String research_id, String startTime, String endTime,String unit,double value,double Longitude, double Latitude, String user_id, String description){
         ContentValues measurementValues=new ContentValues();
