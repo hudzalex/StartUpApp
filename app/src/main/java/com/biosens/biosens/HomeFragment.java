@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
@@ -52,8 +53,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     WaitFragment wfrag;
     private LocationManager locationManager;
     private double lat,lon;
-    private String ListText, user_id;
-
+    private String ListText, user_id, CultureId, FieldId;
+    EditText objectEditText;
+    EditText cultureEditText;
     final Random random = new Random();
     public interface onSomeEventListener {
         public int someEvent();
@@ -96,9 +98,50 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         HashMap<String, String> user = session.getUserDetails();
         user_id = user.get(SessionManagement.KEY_ID);
+        BioSensDatabaseHelper.insertCult(db,"Пшеница",R.drawable.field_1);
+        BioSensDatabaseHelper.insertPlace(db, "Поле 19", 0.0, 0.0,R.drawable.field_1 );
+        objectEditText = (EditText) getActivity().findViewById(R.id.editTextField);
+        cultureEditText = (EditText) getActivity().findViewById(R.id.editTextCulture);
+        try {
 
+            db = biosensDatabaseHelper.getReadableDatabase();
+
+            cursor = db.query("place",
+                    new String[]{"_id","name"},
+                    null,
+                    null,
+                    null, null,null);
+
+
+        } catch(SQLiteException e) {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        objectEditText.setText(cursor.getString(1));
+       FieldId=cursor.getString(0);
+        cursor.close();
+        try {
+
+            db = biosensDatabaseHelper.getReadableDatabase();
+
+            cursor = db.query("culture",
+                    new String[]{"_id","name"},
+                    null,
+                    null,
+                    null, null,null);
+
+
+        } catch(SQLiteException e) {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        cultureEditText.setText(cursor.getString(1));
+        CultureId=cursor.getString(0);
+        cursor.close();
         locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        while (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Enable GPS", Toast.LENGTH_SHORT);
             toast.show();
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
@@ -165,17 +208,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
     // rez = someEventListener.someEvent();
-
+boolean haveToxin=false;
         rez=random.nextInt(2);
         if(rez==0){
             ImageId=R.drawable.success;
             ListText="Toxins are not found";
-
+            haveToxin=false;
         }
         else{
             ImageId=R.drawable.fail;
             ListText="Toxins are found";
-
+            haveToxin=true;
         }
 
 
@@ -203,11 +246,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 		 }else{
 			 PrevImageId=R.drawable.field_2;
 		 }
-		
-		
-        EditText objectEditText = (EditText) getActivity().findViewById(R.id.editTextField);
+		cursor.close();
 
-        EditText cultureEditText = (EditText) getActivity().findViewById(R.id.editTextCulture);
         EditText testEditText = (EditText) getActivity().findViewById(R.id.editTextToxity);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
@@ -216,9 +256,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         String data=dateFormat.format(c.getTime());
 
 
+        BioSensDatabaseHelper.insertResearch(db,FieldId, data, data, CultureId, user_id,haveToxin ,rez,"Analys");
+        try {
 
+            db = biosensDatabaseHelper.getReadableDatabase();
+
+            cursor = db.query("research",
+                    new String[]{"_id"},
+                    null,
+                    null,
+                    null, null,null);
+
+
+        } catch(SQLiteException e) {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        cursor.moveToLast();
+        BioSensDatabaseHelper.insertMeasurement(db,cursor.getString(0), data, data, testEditText.getText().toString(),rez,lon, lat, user_id,"Analys");
         BioSensDatabaseHelper.insertTest(db, rez, objectEditText.getText().toString(), data, cultureEditText.getText().toString(), testEditText.getText().toString(),ListText ,ImageId,PrevImageId, lon, lat, user_id);
-        BioSensDatabaseHelper.insertPlace(db, cultureEditText.getText().toString(), lon, lat, user_id,PrevImageId );
+       // BioSensDatabaseHelper.insertPlace(db, cultureEditText.getText().toString(), lon, lat, user_id,PrevImageId );
         FragmentTransaction ftranssct=getFragmentManager().beginTransaction();
         wfrag=new WaitFragment();
         ftranssct.replace(R.id.container, wfrag);

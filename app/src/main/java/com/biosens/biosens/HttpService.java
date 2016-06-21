@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.CursorAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class HttpService extends Service {
     private Context ctx;
     private SQLiteDatabase db;
     private Cursor cursor;
+    boolean syncTest=false;
     SessionManagement session;
   //  String userid;
     public IBinder onBind(Intent arg0)
@@ -71,13 +73,46 @@ public class HttpService extends Service {
                 db = biosensDatabaseHelper.getReadableDatabase();
 
                 cursor = db.query("place",
-                        new String[]{"_id","name", "longitude","latitude","user_id","photo"},
-                        null,
-                        null,
+                        new String[]{"_id","name", "longitude","latitude","user_id","photo","sync"},
+                        "sync= ?",
+                        new String[]{"0"},
                         null, null,null);
 
                 cursor.moveToFirst();
 
+                if (!cursor.isAfterLast()) {
+                    do {
+                        String s = cursor.getString(1);
+                        String a=cursor.getString(6);
+                        String url = "http://httpbin.org/post";
+                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                        Map<String, String> jsonParams = new HashMap<String, String>();
+                        jsonParams.put("id", cursor.getString(0));
+                        jsonParams.put("name", cursor.getString(1));
+                        jsonParams.put("longitude", String.valueOf(cursor.getDouble(2)));
+                        jsonParams.put("latitude", String.valueOf(cursor.getDouble(3)));
+                        jsonParams.put("userid",cursor.getString(4));
+                        jsonParams.put("photo",String.valueOf(cursor.getInt(5)));
+
+                        JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, url,
+                                new JSONObject(jsonParams),
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        Log.d("Response", String.valueOf(response));
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        //   Handle Error
+                                    }
+                                });
+                        queue.add(postRequest);
+
+                        toastHandler.sendEmptyMessage(0);
+                    } while (cursor.moveToNext());
+                }
 
             } catch(SQLiteException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Database unavailable", Toast.LENGTH_SHORT);
@@ -85,27 +120,7 @@ public class HttpService extends Service {
             }
 
 
-            String url = "http://httpbin.org/post";
-            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            Map<String, String> jsonParams = new HashMap<String, String>();
-            jsonParams.put("email", "user@gmail.com");
-            jsonParams.put("username", "user");
-            jsonParams.put("password", "pass");
-            JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, url,
-                    new JSONObject(jsonParams),
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //   Handle Error
-                        }
-                    });
-            queue.add(postRequest);
-            toastHandler.sendEmptyMessage(0);
+
         }
     }
 
