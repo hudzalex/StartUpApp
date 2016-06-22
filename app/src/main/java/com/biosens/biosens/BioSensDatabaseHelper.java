@@ -94,10 +94,9 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
             );
 
           insertUser(db, "admin", "1111");
-            insertUser(db, "admin2", "1111");
-            insertUser(db, "admin3", "1111");
+
             insertCult(db,"Пшеница",R.drawable.field_1);
-           insertPlace(db, "Поле 19", 0.0, 0.0,R.drawable.field_1 );
+
           /*    insertTest(db, 0, "поле", "12.12.2014", "So", "T2", 0, 0, 1);
             insertTest(db, 1, "поле1", "12.12.2015", "So", "T2", 1, 0, 1);
               insertDrink(db,"Cappuccino","Espresso, hot milk, and a steamed milk foam",R.drawable.cappuccino);
@@ -125,16 +124,16 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         userValues.put("password_hash",password);
         db.insert("user_account",null,userValues);
     }
-    public static void insertPlace(SQLiteDatabase db, String name,double Longitude, double Latitude, int photoID){
+    public static void insertPlace(SQLiteDatabase db, String name,double Longitude, double Latitude, int photoID, String user_id){
         ContentValues placeValues=new ContentValues();
         UUID place_uuid = UUID.randomUUID();
-        UUID user_id = UUID.randomUUID();
+
         boolean sync=false;
         placeValues.put("_id", place_uuid.toString());
         placeValues.put("name",name);
         placeValues.put("longitude",Longitude);
         placeValues.put("latitude",Latitude);
-        placeValues.put("user_id",user_id.toString());
+        placeValues.put("user_id",user_id);
         placeValues.put("photo",photoID);
         placeValues.put("sync",sync);
         long rowid = db.insert("place",null,placeValues);
