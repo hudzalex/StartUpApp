@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -64,12 +65,15 @@ public class PlaceListFragment extends ListFragment {
                     null, null,null);
 
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
-                    R.layout.fragment_place_list,
+                    R.layout.fragment_place_item,
                     cursor,
                     new String[]{"name","photo"},
                     new int[]{R.id.place_name,R.id.place_image},
                     0);
-            setListAdapter(listAdapter);
+
+            ListView placeList = (ListView)layout.findViewById(android.R.id.list);
+
+            placeList.setAdapter(listAdapter);
 
         } catch(SQLiteException e) {
             Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);

@@ -125,9 +125,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 //            int idIndex = cursor.getColumnIndex("_id");
 
             cursor.moveToFirst();
+if(!cursor.isAfterLast()){
 
-            objectEditText.setText(cursor.getString(1));
-            FieldId=cursor.getString(0);
+    objectEditText.setText(cursor.getString(1));
+    FieldId=cursor.getString(0);
+}
 //        }
 
         cursor.close();

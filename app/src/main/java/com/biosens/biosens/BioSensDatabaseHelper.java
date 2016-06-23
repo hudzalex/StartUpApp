@@ -93,9 +93,10 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "sync BOOLEAN NOT NULL)"
             );
 
-          insertUser(db, "admin", "1111");
+           UUID userId = insertUser(db, "admin", "1111");
 
             insertCult(db,"Пшеница",R.drawable.field_1);
+            insertPlace(db,"Field 1", 50, 30, R.drawable.field_1, userId.toString());
 
           /*    insertTest(db, 0, "поле", "12.12.2014", "So", "T2", 0, 0, 1);
             insertTest(db, 1, "поле1", "12.12.2015", "So", "T2", 1, 0, 1);
@@ -116,13 +117,15 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
 
         }
     }
-    public static void insertUser(SQLiteDatabase db, String name, String password){
+    public static UUID insertUser(SQLiteDatabase db, String name, String password){
         ContentValues userValues=new ContentValues();
         UUID user_uuid = UUID.randomUUID();
         userValues.put("_id", user_uuid.toString());
         userValues.put("name",name);
         userValues.put("password_hash",password);
         db.insert("user_account",null,userValues);
+
+        return user_uuid;
     }
     public static void insertPlace(SQLiteDatabase db, String name,double Longitude, double Latitude, int photoID, String user_id){
         ContentValues placeValues=new ContentValues();
