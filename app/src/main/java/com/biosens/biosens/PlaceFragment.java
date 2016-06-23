@@ -16,7 +16,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +43,7 @@ public class PlaceFragment extends Fragment {
     private double lat,lon;
     private String  user_id;
     EditText nameEditText;
-
+    PlaceListFragment plfrag;
 
 
 
@@ -176,6 +176,11 @@ public class PlaceFragment extends Fragment {
 
 
         BioSensDatabaseHelper.insertPlace(db, nameEditText.getText().toString(), lon, lat,PrevImageId,user_id );
+        plfrag=new PlaceListFragment();
+
+        FragmentTransaction ftransact=getFragmentManager().beginTransaction();
+        ftransact.replace(R.id.container,plfrag);
+        ftransact.commit();
 
 
     }

@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.ListFragment;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 public class PlaceListFragment extends ListFragment {
     private SQLiteDatabase db;
     private Cursor cursor;
+    PlaceFragment pfragInser;
     // Alert Dialog Manager
     AlertDialogManager alert = new AlertDialogManager();
 
@@ -32,8 +35,21 @@ public class PlaceListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         session = new SessionManagement(inflater.getContext());
-        HashMap<String, String> user = session.getUserDetails();
+        View layout=inflater.inflate(R.layout.fragment_place_list, container, false);
 
+        HashMap<String, String> user = session.getUserDetails();
+        FloatingActionButton fab = (FloatingActionButton) layout.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                pfragInser=new PlaceFragment();
+
+                FragmentTransaction ftransact=getFragmentManager().beginTransaction();
+                ftransact.replace(R.id.container,pfragInser);
+                ftransact.commit();
+            }
+        });
 
         String user_id = user.get(SessionManagement.KEY_ID);
 
@@ -60,7 +76,7 @@ public class PlaceListFragment extends ListFragment {
             toast.show();
         }
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return layout;
     }
     @Override
     public void onListItemClick(ListView l,
