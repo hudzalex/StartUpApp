@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -23,8 +24,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -55,8 +59,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private LocationManager locationManager;
     private double lat,lon;
     private String ListText, user_id, CultureId, FieldId;
-    EditText objectEditText;
+    CheckBox checkBoxToxity1,checkBoxToxity2,checkBoxToxity3,checkBoxToxity4,checkBoxToxity5,checkBoxToxity6;
+
+
+
     EditText cultureEditText;
+    Spinner spinner;
+
     final Random random = new Random();
     public interface onSomeEventListener {
         public int someEvent();
@@ -90,7 +99,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
 
         });*/
-
+        checkBoxToxity1 = (CheckBox)layout.findViewById(R.id.checkBoxToxity1);
+        checkBoxToxity2 = (CheckBox)layout.findViewById(R.id.checkBoxToxity2);
+        checkBoxToxity3 = (CheckBox)layout.findViewById(R.id.checkBoxToxity3);
+        checkBoxToxity4 = (CheckBox)layout.findViewById(R.id.checkBoxToxity4);
+        checkBoxToxity5 = (CheckBox)layout.findViewById(R.id.checkBoxToxity5);
+        checkBoxToxity6 = (CheckBox)layout.findViewById(R.id.checkBoxToxity6);
         startButton.setOnClickListener(this);
 
      biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
@@ -100,7 +114,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         HashMap<String, String> user = session.getUserDetails();
         user_id = user.get(SessionManagement.KEY_ID);
 
-        objectEditText = (EditText) layout.findViewById(R.id.editTextField);
         cultureEditText = (EditText) layout.findViewById(R.id.editTextCulture);
         try {
 
@@ -118,21 +131,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             toast.show();
         }
 
-        String[] columns = cursor.getColumnNames();
+        spinner = (Spinner) layout.findViewById(R.id.spinner_place);
 
-        //for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-//            int nameIndex = cursor.getColumnIndex("name");
-//            int idIndex = cursor.getColumnIndex("_id");
+        android.widget.SimpleCursorAdapter  adapter = new android.widget.SimpleCursorAdapter(layout.getContext(),
+                android.R.layout.simple_spinner_item,
+                cursor,
+                new String[] {"name"},
+                new int[] {android.R.id.text1}, 0);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setPrompt("Field");
 
-            cursor.moveToFirst();
-if(!cursor.isAfterLast()){
 
-    objectEditText.setText(cursor.getString(1));
-    FieldId=cursor.getString(0);
-}
-//        }
-
-        cursor.close();
         try {
 
             db = biosensDatabaseHelper.getReadableDatabase();
@@ -273,7 +283,7 @@ boolean haveToxin=false;
 		 }
 		cursor.close();
 
-        EditText testEditText = (EditText) getActivity().findViewById(R.id.editTextToxity);
+        //EditText testEditText = (EditText) getActivity().findViewById(R.id.editTextToxity);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         TimeZone utc = TimeZone.getTimeZone("UTC");
         dateFormat.setTimeZone(utc);
@@ -281,26 +291,31 @@ boolean haveToxin=false;
         Calendar c = Calendar.getInstance();
         String data=dateFormat.format(c.getTime());
 
-        UUID researchId = BioSensDatabaseHelper.insertResearch(db,FieldId, data, data, CultureId, user_id,haveToxin ,rez,"Analys");
-//        try {
-//
-//            db = biosensDatabaseHelper.getReadableDatabase();
-//
-//            cursor = db.query("research",
-//                    new String[]{"_id"},
-//                    null,
-//                    null,
-//                    null, null,null);
-//
-//
-//        } catch(SQLiteException e) {
-//            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Database unavailable", Toast.LENGTH_SHORT);
-//            toast.show();
-//        }
-//        cursor.moveToLast();
-        BioSensDatabaseHelper.insertMeasurement(db,researchId.toString(), data, data, testEditText.getText().toString(),rez,lon, lat, user_id,"Analys");
-        BioSensDatabaseHelper.insertTest(db, rez, objectEditText.getText().toString(), data, cultureEditText.getText().toString(), testEditText.getText().toString(),ListText ,ImageId,PrevImageId, lon, lat, user_id);
-       // BioSensDatabaseHelper.insertPlace(db, cultureEditText.getText().toString(), lon, lat, user_id,PrevImageId );
+        SQLiteCursor selectedItem= (SQLiteCursor)spinner.getSelectedItem();
+        String placeId = selectedItem.getString(0);
+        String placeName = selectedItem.getString(1);
+
+
+
+        UUID researchId = BioSensDatabaseHelper.insertResearch(db, placeId, data, data, CultureId, user_id,haveToxin ,rez,"Analys");
+
+        if(checkBoxToxity1.isChecked()){
+
+        } else if (checkBoxToxity2.isChecked()){
+
+        }else if (checkBoxToxity3.isChecked()){
+
+        }else if (checkBoxToxity4.isChecked()){
+
+        }else if (checkBoxToxity5.isChecked()){
+
+        }else if (checkBoxToxity6.isChecked()){
+
+        }
+
+        BioSensDatabaseHelper.insertMeasurement(db,researchId.toString(), data, data, "Mycotoxin T2",rez,lon, lat, user_id,"Analys");
+        BioSensDatabaseHelper.insertTest(db, rez, placeName, data, cultureEditText.getText().toString(), "Mycotoxin T2",ListText ,ImageId,PrevImageId, lon, lat, user_id);
+
         FragmentTransaction ftranssct=getFragmentManager().beginTransaction();
         wfrag=new WaitFragment();
         ftranssct.replace(R.id.container, wfrag);

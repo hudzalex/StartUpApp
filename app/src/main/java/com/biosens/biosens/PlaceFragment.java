@@ -33,7 +33,7 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 
-public class PlaceFragment extends Fragment {
+public class PlaceFragment extends Fragment implements View.OnClickListener {
     Cursor cursor;
     private SQLiteDatabase db;
     SessionManagement session;
@@ -53,7 +53,8 @@ public class PlaceFragment extends Fragment {
         View layout=inflater.inflate(R.layout.fragment_place, container, false);
 
 
-
+        Button createButton = (Button)layout.findViewById(R.id.buttonInsertPlace);
+        createButton.setOnClickListener(this);
 
 
         biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
@@ -140,11 +141,8 @@ public class PlaceFragment extends Fragment {
 
     }
 
-
-    public void onClickInsertPlace() {
-
-
-
+    @Override
+    public void onClick(View v) {
 
         try {
 

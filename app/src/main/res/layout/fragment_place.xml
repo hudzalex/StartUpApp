@@ -57,8 +57,7 @@ tools:context="com.biosens.biosens.PlaceFragment">
             android:layout_marginTop="16dp"
             android:textSize="16dp"
             android:text="Create place"
-            android:textStyle="bold"
-            android:onClick="onClickInsertPlace"/>
+            android:textStyle="bold"/>
 
     </LinearLayout>
 </ScrollView>

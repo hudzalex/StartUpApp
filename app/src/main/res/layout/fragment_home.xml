@@ -33,19 +33,15 @@
                 android:text="Enter data for analysis"/>
 
 
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_place" />
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
-               <EditText
-                    android:id="@+id/editTextField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Field"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -71,17 +67,51 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/editTextCulture"
-                    android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Culture"
-                    android:completionThreshold="1"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:text="Toxings"
+                    android:id="@+id/textView3"
+                    android:layout_gravity="left" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mycotoxin T2"
+                    android:id="@+id/checkBoxToxity1"
+                    android:checked="false" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mycotoxin Don"
+                    android:id="@+id/checkBoxToxity2"
+                    android:checked="false" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mycotoxin Zearalenone"
+                    android:id="@+id/checkBoxToxity3"
+                    android:checked="false" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mycotoxin Patulin"
+                    android:id="@+id/checkBoxToxity4"
+                    android:checked="false" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Aflatoxin B1"
+                    android:id="@+id/checkBoxToxity5"
+                    android:checked="false" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ochratoxin-A"
+                    android:id="@+id/checkBoxToxity6"
+                    android:checked="false" />
+
 
             </android.support.design.widget.TextInputLayout>
 
@@ -90,12 +120,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/editTextToxity"
+                <AutoCompleteTextView
+                    android:id="@+id/editTextCulture"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Damage Type"
-                    android:inputType="text"
+                    android:hint="Culture"
+                    android:completionThreshold="1"
                     android:lines="1"
                     android:maxLines="1"
                     android:singleLine="true" />

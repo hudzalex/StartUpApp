@@ -2,6 +2,7 @@ package com.biosens.biosens;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -207,4 +208,6 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         testValues.put("Sync",sync);
         db.insert("Test",null,testValues);
     }
+
+
 }
