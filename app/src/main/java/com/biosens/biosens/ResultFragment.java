@@ -49,8 +49,7 @@ public class ResultFragment extends ListFragment{
         try {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
             db = biosensDatabaseHelper.getReadableDatabase();
-            String query = "SELECT research._id,research.place_id, research.culture_id,research.end_time,research.have_toxin, place.place_name FROM research INNER JOIN place ON research.place_id = place._id where research.user_id= ?";
-            String query1 = "SELECT place.place_name from research inner join place on research.place_id = place._id where research.user_id= ?";
+            String query1 = "SELECT research.*, place.name FROM research INNER JOIN place ON research.place_id = place._id where research.user_id= ?";
 
             cursor=db.rawQuery(query1,new String[] {user_id});
           /*  cursor = db.query("research",
@@ -99,7 +98,7 @@ public class ResultFragment extends ListFragment{
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                     R.layout.list_layout,
                     cursor,
-                    new String[]{"place_name","end_time","have_toxin"},
+                    new String[]{"name","end_time","have_toxin"},
                     new int[]{R.id.field_name,R.id.date_rez,R.id.list_rez},
                     0);
             setListAdapter(listAdapter);
