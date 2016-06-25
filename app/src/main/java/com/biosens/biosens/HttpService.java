@@ -46,13 +46,11 @@ public class HttpService extends Service {
     SessionManagement session;
     boolean isRunning;
 
-    //  String userid;
     public IBinder onBind(Intent arg0) {
         return null;
     }
 
-    //  String url = "http://httpbin.org/post";
-    // RequestQueue queue = Volley.newRequestQueue(this);
+
     public void onCreate() {
         super.onCreate();
         ctx = this;
@@ -169,7 +167,7 @@ public class HttpService extends Service {
 //                        queue.add(postRequest);
 
                         toastHandler.sendEmptyMessage(0);
-//                    } while (cursor.moveToNext());
+
                     }
 
                 } catch (SQLiteException e) {

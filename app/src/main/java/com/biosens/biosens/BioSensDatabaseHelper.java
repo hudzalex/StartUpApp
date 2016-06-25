@@ -97,7 +97,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
            UUID userId = insertUser(db, "admin", "1111");
 
             insertCult(db,"Пшеница",R.drawable.field_1);
-            insertPlace(db,"Field 1", 50, 30, R.drawable.field_1, userId.toString());
+          //  insertPlace(db,"Field 1", 50, 30, R.drawable.field_1, userId.toString());
 
           /*    insertTest(db, 0, "поле", "12.12.2014", "So", "T2", 0, 0, 1);
             insertTest(db, 1, "поле1", "12.12.2015", "So", "T2", 1, 0, 1);

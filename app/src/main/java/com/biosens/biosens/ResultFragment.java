@@ -47,17 +47,17 @@ public class ResultFragment extends ListFragment{
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
             db = biosensDatabaseHelper.getReadableDatabase();
 
-            cursor = db.query("Test",
-                    new String[]{"_id","Field", "Culture","Date","ListText","ImageId","PrevImageId"},
-                    "USER_UUID= ?",
+            cursor = db.query("research",
+                    new String[]{"_id","place_id", "culture_id","end_time","have_toxin"},
+                    "user_id= ?",
                     new String[] {user_id},
                     null, null,"rowid DESC");
 
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                     R.layout.list_layout,
                     cursor,
-                    new String[]{"Field","Date","ListText","ImageId","PrevImageId"},
-                    new int[]{R.id.field_name,R.id.date_rez,R.id.list_rez,R.id.list_image,R.id.prev_image},
+                    new String[]{"place_id","end_time","have_toxin"},
+                    new int[]{R.id.field_name,R.id.date_rez,R.id.list_rez},
                     0);
             setListAdapter(listAdapter);
 

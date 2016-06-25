@@ -1,13 +1,89 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:weightSum="1">
 
+    <android.support.v7.widget.CardView
+        android:layout_margin="5dp"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        card_view:cardCornerRadius="4dp"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <LinearLayout
+
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            >
+
+            <ImageView
+                android:layout_width="209dp"
+                android:layout_height="209dp"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/field_1"
+                android:id="@+id/field_image"/>
+
+
+            <LinearLayout
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="0.53">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="3"
+                    android:paddingTop="5dp"
+                    android:text="Поле №19"
+                    android:textColor="#222"
+                    android:textSize="18dp"
+                    android:id="@+id/field_name"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:maxLines="3"
+        android:paddingTop="10dp"
+        android:text="16 апреля 2015 года"
+        android:textColor="#999"
+        android:textSize="14dp"
+        android:id="@+id/date_rez"
+        android:layout_marginLeft="15dp" />
+    <LinearLayout
+
+        android:layout_width="327dp"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:src="@drawable/success"
+            android:id="@+id/rez_image"
+            android:layout_marginLeft="15dp" />
+
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result"
         android:id="@+id/textRez"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -17,113 +93,124 @@
         android:textSize="25dp"
         android:gravity="center_horizontal"
         android:textIsSelectable="false"
-android:textStyle="bold" />
-   
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Field"
-        android:id="@+id/textView"
-        android:textSize="15dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="87dp"
-        android:gravity="center_horizontal"
-        android:layout_alignParentEnd="true" />
+android:textStyle="bold"
+            android:layout_marginLeft="10dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:layout_margin="5dp"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            card_view:cardCornerRadius="4dp"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <LinearLayout
+
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="1"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="3"
+                    android:paddingTop="5dp"
+                    android:text="Mycotoxin T2"
+                    android:textColor="#222"
+                    android:textSize="18dp"
+                    android:id="@+id/Toxin_name"/>
+
+                <LinearLayout
+
+                    android:paddingLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="0.53">
+                    <LinearLayout
+
+                        android:paddingLeft="10dp"
+                        android:layout_width="261dp"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal"
+                        android:layout_gravity="right">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="3"
+                            android:paddingTop="5dp"
+                            android:text="Value"
+                            android:textColor="#222"
+                            android:textSize="18dp"
+                            android:id="@+id/Rez_name"
+                            android:layout_marginLeft="10dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="3"
+                            android:paddingTop="5dp"
+                            android:text="Boundary value"
+                            android:textColor="#222"
+                            android:textSize="18dp"
+                            android:id="@+id/Rez_nameB"
+                            android:layout_marginLeft="20dp" />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+
+                        android:paddingLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="0.53"
+                        android:weightSum="1">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="3"
+                            android:paddingTop="5dp"
+                            android:text="10"
+                            android:textColor="#222"
+                            android:textSize="18dp"
+                            android:id="@+id/Rez_nameValue"
+                            android:layout_marginLeft="20dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="3"
+                            android:paddingTop="5dp"
+                            android:text="50"
+                            android:textColor="#222"
+                            android:textSize="18dp"
+                            android:id="@+id/Rez_nameBValue"
+                            android:layout_marginLeft="80dp"
+                            android:layout_weight="2.17" />
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
 
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textViewobj1"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView"
-        android:textSize="25dp"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"/>
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Culture"
-        android:id="@+id/textViewСгде"
-        android:layout_below="@+id/textViewobj1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="15dp"
-        android:gravity="center_horizontal" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textViewCult1"
-        android:layout_below="@+id/textViewСгде"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/textViewСгде"
-        android:layout_alignEnd="@+id/textViewСгде"
-        android:textSize="25dp"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Damage Type"
-        android:textSize="15dp"
-        android:id="@+id/text"
-        android:gravity="center_horizontal"
-        android:layout_below="@+id/textViewCult1"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textViewTest1"
-        android:textSize="25dp"
-        android:gravity="center_horizontal"
-        android:layout_below="@+id/text"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"/>
-		
-		 <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date"
-        android:id="@+id/textView4"
-        android:textSize="15dp"
-        android:layout_below="@+id/textViewTest1"
-        android:layout_centerHorizontal="true" 
-		android:gravity="center_horizontal" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textViewDate1"
-        android:textSize="25dp"
-        android:gravity="center_horizontal"
-        android:layout_below="@+id/textView4"
-        android:textStyle="bold"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-
-        android:layout_below="@+id/textViewDate1"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="47dp"
-        android:layout_alignParentEnd="true" />
-</RelativeLayout>
+</LinearLayout>

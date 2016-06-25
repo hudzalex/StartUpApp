@@ -53,14 +53,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private SQLiteDatabase db;
     SessionManagement session;
     SQLiteOpenHelper biosensDatabaseHelper;
-    private  int rez,ImageId,PrevImageId, inp;
-    EditText dateEditText;
+    private  int rez1,rez2,rez3,rez4,rez5,rez6;
+  //  EditText dateEditText;
     WaitFragment wfrag;
-    private LocationManager locationManager;
-    private double lat,lon;
-    private String ListText, user_id, CultureId, FieldId;
-    CheckBox checkBoxToxity1,checkBoxToxity2,checkBoxToxity3,checkBoxToxity4,checkBoxToxity5,checkBoxToxity6;
 
+    private String  user_id, CultureId;
+    CheckBox checkBoxToxity1,checkBoxToxity2,checkBoxToxity3,checkBoxToxity4,checkBoxToxity5,checkBoxToxity6;
+    boolean toxin1, toxin2,toxin3,toxin4,toxin5,toxin6;
 
 
     EditText cultureEditText;
@@ -99,6 +98,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
 
         });*/
+        toxin1=false; toxin2=false;toxin3=false;toxin4=false;toxin5=false;toxin6=false;
         checkBoxToxity1 = (CheckBox)layout.findViewById(R.id.checkBoxToxity1);
         checkBoxToxity2 = (CheckBox)layout.findViewById(R.id.checkBoxToxity2);
         checkBoxToxity3 = (CheckBox)layout.findViewById(R.id.checkBoxToxity3);
@@ -164,75 +164,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         CultureId=cursor.getString(0);
         cursor.close();
 
-        locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Enable GPS", Toast.LENGTH_SHORT);
-            toast.show();
-            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 
-        }
-
-        if (ContextCompat.checkSelfPermission(inflater.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED)
-        {
-
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    1000 * 10, 10, locationListener);
-
-            locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
-                    locationListener);
-        }
 
         // Inflate the layout for this fragment
         someEventListener.someEvent();
         return layout;
     }
 
-    private static final int INITIAL_REQUEST=1337;
-    private static final int CAMERA_REQUEST=INITIAL_REQUEST+1;
-    private static final int CONTACTS_REQUEST=INITIAL_REQUEST+2;
-    private static final int LOCATION_REQUEST=INITIAL_REQUEST+3;
 
-    private LocationListener locationListener = new LocationListener() {
-
-        @Override
-        public void onLocationChanged(Location location) {
-            showLocation(location);
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-            if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED)
-                showLocation(locationManager.getLastKnownLocation(provider));
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-    };
-    private void showLocation(Location location) {
-        if (location == null)
-            return;
-        if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
-            lat=location.getLatitude();
-            lon=location.getLongitude();
-
-        } else if (location.getProvider().equals(
-                LocationManager.NETWORK_PROVIDER)) {
-            lat=location.getLatitude();
-            lon=location.getLongitude();
-
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -244,44 +183,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
     // rez = someEventListener.someEvent();
 boolean haveToxin=false;
-        rez=random.nextInt(2);
-        if(rez==0){
-            ImageId=R.drawable.success;
-            ListText="Toxins are not found";
-            haveToxin=false;
-        }
-        else{
-            ImageId=R.drawable.fail;
-            ListText="Toxins are found";
-            haveToxin=true;
-        }
+        rez1=random.nextInt(2);
+        rez2=random.nextInt(2);
+        rez3=random.nextInt(2);
+        rez4=random.nextInt(2);
+        rez5=random.nextInt(2);
+        rez6=random.nextInt(2);
 
 
-		 try {
 
-            db = biosensDatabaseHelper.getReadableDatabase();
-
-            cursor = db.query("Test",
-                    new String[]{"Field", "Culture","Affection","Date","Result"},
-                    "USER_UUID= ?",
-                    new String[] {String.valueOf(user_id)},
-                    null, null,null);
-
-
-        } catch(SQLiteException e) {
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Database unavailable", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-
-
-         inp=cursor.getCount();
-
-		if(inp%2==0){
-            PrevImageId=R.drawable.field_1;
-		 }else{
-			 PrevImageId=R.drawable.field_2;
-		 }
-		cursor.close();
 
         //EditText testEditText = (EditText) getActivity().findViewById(R.id.editTextToxity);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -293,32 +203,52 @@ boolean haveToxin=false;
 
         SQLiteCursor selectedItem= (SQLiteCursor)spinner.getSelectedItem();
         String placeId = selectedItem.getString(0);
-        String placeName = selectedItem.getString(1);
+//        String placeName = selectedItem.getString(1);
 
 
 
-        UUID researchId = BioSensDatabaseHelper.insertResearch(db, placeId, data, data, CultureId, user_id,haveToxin ,rez,"Analys");
+        String researchId = BioSensDatabaseHelper.insertResearch(db, placeId, data, data, CultureId, user_id,haveToxin ,0,"Analys").toString();
 
         if(checkBoxToxity1.isChecked()){
-
-        } else if (checkBoxToxity2.isChecked()){
-
-        }else if (checkBoxToxity3.isChecked()){
-
-        }else if (checkBoxToxity4.isChecked()){
-
-        }else if (checkBoxToxity5.isChecked()){
-
-        }else if (checkBoxToxity6.isChecked()){
-
+            toxin1=true;
+        }
+        if (checkBoxToxity2.isChecked()){
+            toxin2=true;
+        }
+        if (checkBoxToxity3.isChecked()){
+            toxin3=true;
+        }
+        if (checkBoxToxity4.isChecked()){
+            toxin4=true;
+        }
+        if (checkBoxToxity5.isChecked()){
+            toxin5=true;
+        }
+        if (checkBoxToxity6.isChecked()){
+            toxin6=true;
         }
 
-        BioSensDatabaseHelper.insertMeasurement(db,researchId.toString(), data, data, "Mycotoxin T2",rez,lon, lat, user_id,"Analys");
-        BioSensDatabaseHelper.insertTest(db, rez, placeName, data, cultureEditText.getText().toString(), "Mycotoxin T2",ListText ,ImageId,PrevImageId, lon, lat, user_id);
-
+       // BioSensDatabaseHelper.insertMeasurement(db,researchId.toString(), data, data, "Mycotoxin T2",rez,lon, lat, user_id,"Analys");
+      //  BioSensDatabaseHelper.insertTest(db, rez, placeName, data, cultureEditText.getText().toString(), "Mycotoxin T2",ListText ,ImageId,PrevImageId, lon, lat, user_id);
+        Bundle bundle = new Bundle();
+        bundle.putString("ResearchId", researchId);
+        bundle.putInt("ResStartValue1", rez1);
+        bundle.putInt("ResStartValue2", rez2);
+        bundle.putInt("ResStartValue3", rez3);
+        bundle.putInt("ResStartValue4", rez4);
+        bundle.putInt("ResStartValue5", rez5);
+        bundle.putInt("ResStartValue6", rez6);
+        bundle.putBoolean("Toxin1", toxin1);
+        bundle.putBoolean("Toxin2", toxin2);
+        bundle.putBoolean("Toxin3", toxin3);
+        bundle.putBoolean("Toxin4", toxin4);
+        bundle.putBoolean("Toxin5", toxin5);
+        bundle.putBoolean("Toxin6", toxin6);
+        WaitFragment Wfragment =new WaitFragment();
+        Wfragment.setArguments(bundle);
         FragmentTransaction ftranssct=getFragmentManager().beginTransaction();
-        wfrag=new WaitFragment();
-        ftranssct.replace(R.id.container, wfrag);
+
+        ftranssct.replace(R.id.container, Wfragment );
         ftranssct.commit();
     }
 
