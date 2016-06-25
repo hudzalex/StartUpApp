@@ -80,7 +80,7 @@ public class ResFragment extends ListFragment {
 
         if (ContextCompat.checkSelfPermission(inflater.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED)
-        {
+
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     1000 * 10, 10, locationListener);
@@ -88,7 +88,7 @@ public class ResFragment extends ListFragment {
             locationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
                     locationListener);
-        }
+
         boolean haveToxin=false;
         String ListText="";
         int ImageId=0;
@@ -122,15 +122,18 @@ public class ResFragment extends ListFragment {
         double rezult4=rez4-ResStartValue4;
         double rezult5=rez5-ResStartValue5;
         double rezult6=rez6-ResStartValue6;
-        if(rezult1>toxin1b || rezult2>toxin2b || rezult3>toxin3b || rezult4>toxin4b || rezult5>toxin5b || rezult6>toxin6b){
+        biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
+        db = biosensDatabaseHelper.getWritableDatabase();
+        if((rezult1>toxin1b && toxin1==true)  || (rezult2>toxin2b && toxin2==true) || (rezult3>toxin3b && toxin3==true) || (rezult4>toxin4b && toxin4==true) || (rezult5>toxin5b && toxin5==true) || (rezult6>toxin6b && toxin6==true)){
             ImageId=R.drawable.fail;
             ListText="Toxins detected";
-            haveToxin=true;
+            BioSensDatabaseHelper.updateResearch( db,user_id, ResearchId,  true);
+
         }
         else{
             ImageId=R.drawable.success;
             ListText="Toxins not detected";
-            haveToxin=false;
+
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -139,8 +142,8 @@ public class ResFragment extends ListFragment {
 
         Calendar c = Calendar.getInstance();
         String data=dateFormat.format(c.getTime());
-        biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
-        db = biosensDatabaseHelper.getWritableDatabase();
+
+
         if(toxin1==true){
             BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "Mycotoxin T2",rezult1,lon, lat, user_id,"Analys");
            // if(rezult1>toxin1b){}
@@ -210,6 +213,7 @@ cursor.close();
 
         photo.setImageResource(PlacePhoto);
         photo.setContentDescription("Place Photo");
+
 
         fieldName.setText(PlaceName);
         DateRez.setText(ResearcgDate);

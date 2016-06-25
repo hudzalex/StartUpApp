@@ -45,7 +45,10 @@ public class HttpService extends Service {
     boolean syncTest = false;
     SessionManagement session;
     boolean isRunning;
-
+    int countTables=0;
+    String tableName="";
+    String id="";
+String userid;
     public IBinder onBind(Intent arg0) {
         return null;
     }
@@ -54,11 +57,11 @@ public class HttpService extends Service {
     public void onCreate() {
         super.onCreate();
         ctx = this;
-        //  session = new SessionManagement(getApplicationContext());
-        //  HashMap<String, String> user = session.getUserDetails();
+       session = new SessionManagement(getApplicationContext());
+         HashMap<String, String> user = session.getUserDetails();
 
 
-        //  userid = user.get(SessionManagement.KEY_ID);
+          userid = user.get(SessionManagement.KEY_ID);
 
         isRunning = true;
         new HttpWorker().execute();
@@ -88,16 +91,44 @@ public class HttpService extends Service {
 
                 HttpURLConnection conn = null;
                 int sleepTime = 15000;
+                SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(getApplicationContext());
+                db = biosensDatabaseHelper.getReadableDatabase();
 
                 try {
-                    SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(getApplicationContext());
-                    db = biosensDatabaseHelper.getReadableDatabase();
 
+                    if(countTables==0){
+                        tableName="place";
                     cursor = db.query("place",
                             new String[]{"_id", "name", "longitude", "latitude", "user_id", "photo", "sync"},
                             "sync= ?",
                             new String[]{"0"},
                             null, null, null);
+
+
+                    } else if(countTables==1){
+                        tableName="research";
+                        cursor = db.query("research",
+                                new String[]{"_id", "place_id", "start_time", "end_time", "culture_id", "user_id","have_toxin","toxin_level","description", "sync"},
+                                "sync= ?",
+                                new String[]{"0"},
+                                null, null, null);
+                    }else if(countTables==2){
+
+                        tableName="measurement";
+                        cursor = db.query("measurement",
+                                new String[]{"_id", "research_id","start_time","end_time","unit","value","longitude", "latitude", "user_id", "description", "sync"},
+                                "sync= ?",
+                                new String[]{"0"},
+                                null, null, null);
+                    }else if(countTables==3){
+                        tableName="culture";
+                        cursor = db.query("culture",
+                                new String[]{"_id", "name","user_id", "photo", "sync"},
+                                "sync= ?",
+                                new String[]{"0"},
+                                null, null, null);
+                    }
+
 
                     cursor.moveToFirst();
 
@@ -108,14 +139,49 @@ public class HttpService extends Service {
                         URL url = new URL("http://httpbin.org/post");
       //                  RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                         Map<String, String> jsonParams = new HashMap<String, String>();
+                        if(countTables==0){
+                            id = cursor.getString(0);
+                            jsonParams.put("id", id);
+                            jsonParams.put("name", cursor.getString(1));
+                            jsonParams.put("longitude", String.valueOf(cursor.getDouble(2)));
+                            jsonParams.put("latitude", String.valueOf(cursor.getDouble(3)));
+                            jsonParams.put("userId", cursor.getString(4));
+                            jsonParams.put("photo", String.valueOf(cursor.getInt(5)));
 
-                        String id = cursor.getString(0);
-                        jsonParams.put("id", id);
-                        jsonParams.put("name", cursor.getString(1));
-                        jsonParams.put("longitude", String.valueOf(cursor.getDouble(2)));
-                        jsonParams.put("latitude", String.valueOf(cursor.getDouble(3)));
-                        jsonParams.put("userId", cursor.getString(4));
-                        jsonParams.put("photo", String.valueOf(cursor.getInt(5)));
+                        } else if(countTables==1){
+                            id = cursor.getString(0);
+                            jsonParams.put("id", id);
+                            jsonParams.put("placeId", cursor.getString(1));
+                            jsonParams.put("startTime", cursor.getString(2));
+                            jsonParams.put("endTime", cursor.getString(3));
+                            jsonParams.put("cultureId", cursor.getString(4));
+                            jsonParams.put("userId", cursor.getString(5));
+                            jsonParams.put("haveToxin",cursor.getString(6));
+                            jsonParams.put("toxinLevel", String.valueOf(cursor.getDouble(7)));
+                            jsonParams.put("description",cursor.getString(8));
+
+                        }else if(countTables==2){
+                            id = cursor.getString(0);
+                            jsonParams.put("id", id);
+                            jsonParams.put("researchId", cursor.getString(1));
+                            jsonParams.put("startTime", cursor.getString(2));
+                            jsonParams.put("endTime", cursor.getString(3));
+                            jsonParams.put("unit", cursor.getString(4));
+                            jsonParams.put("value", String.valueOf(cursor.getDouble(5)));
+                            jsonParams.put("longitude", String.valueOf(cursor.getDouble(6)));
+                            jsonParams.put("latitude", String.valueOf(cursor.getDouble(7)));
+                            jsonParams.put("userId",cursor.getString(8));
+                            jsonParams.put("description",cursor.getString(9));
+
+                        }else if(countTables==3){
+                            id = cursor.getString(0);
+                            jsonParams.put("id", id);
+                            jsonParams.put("name", cursor.getString(1));
+                            jsonParams.put("userId", cursor.getString(2));
+                            jsonParams.put("photo", String.valueOf(cursor.getInt(3)));
+
+                        }
+
 
                         String json = new JSONObject(jsonParams).toString();
 
@@ -139,6 +205,11 @@ public class HttpService extends Service {
                         int responseCode = conn.getResponseCode();
                         String response = "";
                         if (responseCode == HttpsURLConnection.HTTP_OK) {
+                            BioSensDatabaseHelper. updateSync(db,tableName,userid, id,true);
+                            if(countTables==3)
+                            {countTables=0;}
+                            else{countTables++;}
+
                             String line;
                             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                             while ((line = br.readLine()) != null) {

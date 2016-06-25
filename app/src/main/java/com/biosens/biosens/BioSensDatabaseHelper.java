@@ -172,6 +172,31 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
 
         return research_uuid;
     }
+
+    public static void updateResearch(SQLiteDatabase db, String user_id, String Id, boolean haveToxin){
+        ContentValues researchValues=new ContentValues();
+
+        researchValues.put("have_toxin",haveToxin);
+
+
+        String where = "user_id=? and _id=?";
+        String[] whereArgs = new String[] {user_id, Id};
+
+
+        db.update("research", researchValues, where, whereArgs);
+
+
+
+    }
+    public static void updateSync(SQLiteDatabase db, String TtableName, String user_id,  String Id, boolean sync){
+        ContentValues updateSync=new ContentValues();
+        updateSync.put("sync",sync);
+        String where = "user_id=? and _id=?";
+        String[] whereArgs = new String[] {user_id, Id};
+        db.update(TtableName, updateSync, where, whereArgs);
+    }
+
+
     public static void insertMeasurement(SQLiteDatabase db, String research_id, String startTime, String endTime,String unit,double value,double Longitude, double Latitude, String user_id, String description){
         ContentValues measurementValues=new ContentValues();
         UUID test_uuid = UUID.randomUUID();

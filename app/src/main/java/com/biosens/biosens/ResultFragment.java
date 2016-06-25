@@ -28,7 +28,10 @@ import java.util.HashMap;
 
 public class ResultFragment extends ListFragment{
     private SQLiteDatabase db;
-    private Cursor cursor;
+    private Cursor cursor,cursor1;
+    String placeName,Date,ListText,plase_id;
+    int placePhoto,ImageId;
+    int haveToxin;
     // Alert Dialog Manager
     AlertDialogManager alert = new AlertDialogManager();
 
@@ -52,6 +55,43 @@ public class ResultFragment extends ListFragment{
                     "user_id= ?",
                     new String[] {user_id},
                     null, null,"rowid DESC");
+/*cursor.moveToFirst();
+            if(!cursor.isAfterLast()){
+                do{
+                    Date=cursor.getString(3);
+                    haveToxin=cursor.getInt(4);
+                    plase_id=cursor.getString(1);
+                    try {
+                        SQLiteOpenHelper biosensDatabaseHelper1 = new BioSensDatabaseHelper(inflater.getContext());
+                        db = biosensDatabaseHelper1.getReadableDatabase();
+
+                        cursor1 = db.query("place",
+                                new String[]{"_id", "place_name","photo"},
+                                "user_id= ? and _id= ?",
+                                new String[]{user_id, plase_id},
+                                null, null, null);
+                    }catch(SQLiteException e) {
+                        Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    placeName=cursor1.getString(1);
+                    placePhoto=cursor1.getInt(2);
+                    if(haveToxin==1){
+                        ImageId=R.drawable.fail;
+                        ListText="Toxins detected";
+
+
+                    }
+                    else{
+                        ImageId=R.drawable.success;
+                        ListText="Toxins not detected";
+
+                    }
+                }
+
+
+                while (cursor.moveToNext());
+            }*/
 
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                     R.layout.list_layout,
