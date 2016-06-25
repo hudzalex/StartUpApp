@@ -228,10 +228,10 @@ cursor.close();
                     null, null,null);
 
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
-                    R.layout.fragment_res,
+                    R.layout.fragment_res_item,
                     cursor,
                     new String[]{"unit","value"},
-                    new int[]{R.id.Rez_nameValue,R.id.Rez_nameBValue},
+                    new int[]{R.id.Toxin_name,R.id.Rez_nameValue},
                     0);
             ListView resList = (ListView)layout.findViewById(android.R.id.list);
 
