@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private SQLiteDatabase db;
     SessionManagement session;
     SQLiteOpenHelper biosensDatabaseHelper;
-    private  int rez1,rez2,rez3,rez4,rez5,rez6;
+    private  double rez1,rez2,rez3,rez4,rez5,rez6;
   //  EditText dateEditText;
     WaitFragment wfrag;
 
@@ -183,12 +183,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
     // rez = someEventListener.someEvent();
 boolean haveToxin=false;
-        rez1=random.nextInt(2);
-        rez2=random.nextInt(2);
-        rez3=random.nextInt(2);
-        rez4=random.nextInt(2);
-        rez5=random.nextInt(2);
-        rez6=random.nextInt(2);
+
+
+        new ReadMeasurementBluetoothTask(new ReadMeasurementBluetoothTask.ReadMeasurementBluetoothCallback(){
+            @Override
+            public void onMeasurement(double[] result) {
+                rez1 = result[0];
+                rez2 = result[1];
+                rez3 = result[2];
+                rez4 = result[3];
+                rez5 = result[4];
+                rez6 = result[5];
+            }
+        }).execute();
+
 
 
 
@@ -207,7 +215,7 @@ boolean haveToxin=false;
 
 
 
-        String researchId = BioSensDatabaseHelper.insertResearch(db, placeId, data, data, CultureId, user_id,haveToxin ,0,"Analys").toString();
+        String researchId = BioSensDatabaseHelper.insertResearch(db, placeId, data, data, CultureId, user_id,haveToxin,"Analys").toString();
 
         if(checkBoxToxity1.isChecked()){
             toxin1=true;
@@ -232,12 +240,12 @@ boolean haveToxin=false;
       //  BioSensDatabaseHelper.insertTest(db, rez, placeName, data, cultureEditText.getText().toString(), "Mycotoxin T2",ListText ,ImageId,PrevImageId, lon, lat, user_id);
         Bundle bundle = new Bundle();
         bundle.putString("ResearchId", researchId);
-        bundle.putInt("ResStartValue1", rez1);
-        bundle.putInt("ResStartValue2", rez2);
-        bundle.putInt("ResStartValue3", rez3);
-        bundle.putInt("ResStartValue4", rez4);
-        bundle.putInt("ResStartValue5", rez5);
-        bundle.putInt("ResStartValue6", rez6);
+        bundle.putDouble("ResStartValue1", rez1);
+        bundle.putDouble("ResStartValue2", rez2);
+        bundle.putDouble("ResStartValue3", rez3);
+        bundle.putDouble("ResStartValue4", rez4);
+        bundle.putDouble("ResStartValue5", rez5);
+        bundle.putDouble("ResStartValue6", rez6);
         bundle.putBoolean("Toxin1", toxin1);
         bundle.putBoolean("Toxin2", toxin2);
         bundle.putBoolean("Toxin3", toxin3);

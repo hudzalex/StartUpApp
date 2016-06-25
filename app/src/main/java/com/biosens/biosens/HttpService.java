@@ -108,7 +108,7 @@ String userid;
                     } else if(countTables==1){
                         tableName="research";
                         cursor = db.query("research",
-                                new String[]{"_id", "place_id", "start_time", "end_time", "culture_id", "user_id","have_toxin","toxin_level","description", "sync"},
+                                new String[]{"_id", "place_id", "start_time", "end_time", "culture_id", "user_id","have_toxin","description", "sync"},
                                 "sync= ?",
                                 new String[]{"0"},
                                 null, null, null);
@@ -116,7 +116,7 @@ String userid;
 
                         tableName="measurement";
                         cursor = db.query("measurement",
-                                new String[]{"_id", "research_id","start_time","end_time","unit","value","longitude", "latitude", "user_id", "description", "sync"},
+                                new String[]{"_id", "research_id","start_time","end_time","unit","value","boundary_value","longitude", "latitude", "user_id", "description", "sync"},
                                 "sync= ?",
                                 new String[]{"0"},
                                 null, null, null);
@@ -157,8 +157,7 @@ String userid;
                             jsonParams.put("cultureId", cursor.getString(4));
                             jsonParams.put("userId", cursor.getString(5));
                             jsonParams.put("haveToxin",cursor.getString(6));
-                            jsonParams.put("toxinLevel", String.valueOf(cursor.getDouble(7)));
-                            jsonParams.put("description",cursor.getString(8));
+                            jsonParams.put("description",cursor.getString(7));
 
                         }else if(countTables==2){
                             id = cursor.getString(0);
@@ -168,10 +167,11 @@ String userid;
                             jsonParams.put("endTime", cursor.getString(3));
                             jsonParams.put("unit", cursor.getString(4));
                             jsonParams.put("value", String.valueOf(cursor.getDouble(5)));
-                            jsonParams.put("longitude", String.valueOf(cursor.getDouble(6)));
-                            jsonParams.put("latitude", String.valueOf(cursor.getDouble(7)));
-                            jsonParams.put("userId",cursor.getString(8));
-                            jsonParams.put("description",cursor.getString(9));
+                            jsonParams.put("boundaryValue", String.valueOf(cursor.getDouble(6)));
+                            jsonParams.put("longitude", String.valueOf(cursor.getDouble(7)));
+                            jsonParams.put("latitude", String.valueOf(cursor.getDouble(8)));
+                            jsonParams.put("userId",cursor.getString(9));
+                            jsonParams.put("description",cursor.getString(10));
 
                         }else if(countTables==3){
                             id = cursor.getString(0);
@@ -206,9 +206,6 @@ String userid;
                         String response = "";
                         if (responseCode == HttpsURLConnection.HTTP_OK) {
                             BioSensDatabaseHelper. updateSync(db,tableName,userid, id,true);
-                            if(countTables==3)
-                            {countTables=0;}
-                            else{countTables++;}
 
                             String line;
                             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -259,6 +256,11 @@ String userid;
                 } catch (InterruptedException e) {
                     return null;
                 }
+
+
+                if(countTables>=3)
+                {countTables=0;}
+                else{countTables++;}
             }
 
             return null;

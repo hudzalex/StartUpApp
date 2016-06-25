@@ -11,7 +11,10 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +26,14 @@ public class ListResFragment extends Fragment {
     SQLiteOpenHelper biosensDatabaseHelper;
     Cursor cursor;
     SessionManagement session;
+    int ImageId;
+    String ListText;
     int rez;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View layout=inflater.inflate(R.layout.fragment_list_res, container, false);
+        View layout=inflater.inflate(R.layout.fragment_res, container, false);
 
         session = new SessionManagement(inflater.getContext());
         HashMap<String, String> user = session.getUserDetails();
@@ -40,41 +45,93 @@ public class ListResFragment extends Fragment {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
             db = biosensDatabaseHelper.getReadableDatabase();
 
-            cursor = db.query("Test",
-                    new String[]{"Field", "Culture","Affection","Date","Result"},
-                    "USER_UUID= ? and _id= ?",
-                    new String[] {user_id, row_id},
+            cursor = db.query("research",
+                    new String[]{"place_id","end_time","have_toxin"},
+                    "user_id= ? and _id= ?",
+                    new String[] {user_id,row_id},
                     null, null,null);
 
 
         } catch(SQLiteException e) {
             Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
-            return layout;
         }
         cursor.moveToFirst();
-        TextView field=(TextView)layout.findViewById(R.id.textViewobj2);
-        TextView cult=(TextView)layout.findViewById(R.id.textViewCult2);
-        TextView date=(TextView)layout.findViewById(R.id.textViewDate2);
-        TextView affect=(TextView)layout.findViewById(R.id.textViewTest2);
-        TextView textrez=(TextView)layout.findViewById(R.id.textRez);
-        ImageView photo = (ImageView)layout.findViewById(R.id.imageView);
+        int haveToxin=cursor.getInt(2);
+        String PlaceId=cursor.getString(0);
+        String ResearcgDate=cursor.getString(1);
+        cursor.close();
+        try {
+            SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
+            db = biosensDatabaseHelper.getReadableDatabase();
+
+            cursor = db.query("place",
+                    new String[]{"name","photo"},
+                    "user_id= ? and _id= ?",
+                    new String[] {user_id,PlaceId},
+                    null, null,null);
 
 
-        field.setText(cursor.getString(0));
-        date.setText(cursor.getString(3));
-        cult.setText(cursor.getString(1));
-        affect.setText(cursor.getString(2));
-        rez=cursor.getInt(4);
-        if(rez==0){
-            textrez.setText("Toxins are not found");
-            photo.setImageResource(R.drawable.positive);
-            photo.setContentDescription("Good");
+        } catch(SQLiteException e) {
+            Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        cursor.moveToFirst();
+        String PlaceName=cursor.getString(0);
+        int PlacePhoto = cursor.getInt(1);
+        cursor.close();
+        if(haveToxin==1){
+            ImageId=R.drawable.fail;
+            ListText="Toxins detected";
+
+
         }
         else{
-            textrez.setText("Toxins are found");
-            photo.setImageResource(R.drawable.danger);
-            photo.setContentDescription("Bad");
+            ImageId=R.drawable.success;
+            ListText="Toxins not detected";
+
+        }
+        TextView fieldName=(TextView)layout.findViewById(R.id.field_name);
+        TextView DateRez=(TextView)layout.findViewById(R.id.date_rez);
+        TextView TextRez=(TextView)layout.findViewById(R.id.textRez);
+
+        ImageView photo = (ImageView)layout.findViewById(R.id.field_image);
+        ImageView photoRez = (ImageView)layout.findViewById(R.id.rez_image);
+
+        photo.setImageResource(PlacePhoto);
+        photo.setContentDescription("Place Photo");
+
+
+        fieldName.setText(PlaceName);
+        DateRez.setText(ResearcgDate);
+        TextRez.setText(ListText);
+        photoRez.setImageResource(ImageId);
+        photoRez.setContentDescription("Rez");
+
+        try {
+            SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
+            db = biosensDatabaseHelper.getReadableDatabase();
+
+            cursor = db.query("measurement",
+                    new String[]{"unit", "value","boundary_value","_id"},
+                    "user_id= ? and research_id= ?",
+                    new String[] {user_id,row_id},
+                    null, null,null);
+
+            CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
+                    R.layout.fragment_res_item,
+                    cursor,
+                    new String[]{"unit","value","boundary_value"},
+                    new int[]{R.id.Toxin_name,R.id.Rez_nameValue,R.id.Rez_nameBValue},
+                    0);
+            ListView resList = (ListView)layout.findViewById(android.R.id.list);
+
+            resList.setAdapter(listAdapter);
+
+
+        } catch(SQLiteException e) {
+            Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
         }
         return layout;
     }

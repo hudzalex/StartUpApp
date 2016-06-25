@@ -42,7 +42,7 @@ public class ResFragment extends ListFragment {
     private LocationManager locationManager;
     private double lat,lon;
     final Random random = new Random();
-    int ResStartValue1=0,ResStartValue2=0,ResStartValue3=0,ResStartValue4=0,ResStartValue5=0,ResStartValue6=0 ;
+    double ResStartValue1=0,ResStartValue2=0,ResStartValue3=0,ResStartValue4=0,ResStartValue5=0,ResStartValue6=0 ;
     String ResearchId="" ;
     boolean toxin1=false;
     boolean toxin2=false;
@@ -56,7 +56,7 @@ public class ResFragment extends ListFragment {
     double toxin4b=4.0;
     double toxin5b=4.0;
     double toxin6b=1.0;
-    int rez1,rez2,rez3,rez4,rez5,rez6;
+    double rez1,rez2,rez3,rez4,rez5,rez6;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,12 +95,12 @@ public class ResFragment extends ListFragment {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-             ResStartValue1 = bundle.getInt("ResStartValue1", 0);
-            ResStartValue2 = bundle.getInt("ResStartValue2", 0);
-            ResStartValue3 = bundle.getInt("ResStartValue3", 0);
-            ResStartValue4 = bundle.getInt("ResStartValue4", 0);
-            ResStartValue5 = bundle.getInt("ResStartValue5", 0);
-            ResStartValue6 = bundle.getInt("ResStartValue6", 0);
+             ResStartValue1 = bundle.getDouble("ResStartValue1", 0);
+            ResStartValue2 = bundle.getDouble("ResStartValue2", 0);
+            ResStartValue3 = bundle.getDouble("ResStartValue3", 0);
+            ResStartValue4 = bundle.getDouble("ResStartValue4", 0);
+            ResStartValue5 = bundle.getDouble("ResStartValue5", 0);
+            ResStartValue6 = bundle.getDouble("ResStartValue6", 0);
            ResearchId = bundle.getString("ResearchId", "");
              toxin1=bundle.getBoolean("Toxin1");
            toxin2=bundle.getBoolean("Toxin2");
@@ -110,12 +110,18 @@ public class ResFragment extends ListFragment {
            toxin6=bundle.getBoolean("Toxin6");
 
         }
-        rez1=random.nextInt(10);
-        rez2=random.nextInt(10);
-        rez3=random.nextInt(10);
-        rez4=random.nextInt(10);
-        rez5=random.nextInt(10);
-        rez6=random.nextInt(10);
+
+        new ReadMeasurementBluetoothTask(new ReadMeasurementBluetoothTask.ReadMeasurementBluetoothCallback(){
+            @Override
+            public void onMeasurement(double[] result) {
+                rez1 = result[0];
+                rez2 = result[1];
+                rez3 = result[2];
+                rez4 = result[3];
+                rez5 = result[4];
+                rez6 = result[5];
+            }
+        }).execute();
         double rezult1=rez1-ResStartValue1;
         double rezult2=rez2-ResStartValue2;
         double rezult3=rez3-ResStartValue3;
@@ -145,23 +151,23 @@ public class ResFragment extends ListFragment {
 
 
         if(toxin1==true){
-            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "Mycotoxin T2",rezult1,lon, lat, user_id,"Analys");
+            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "mycotoxin-t2",rezult1,toxin1b,lon, lat, user_id,"Analys");
            // if(rezult1>toxin1b){}
         }
         if(toxin2==true){
-            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "Mycotoxin Don",rezult2,lon, lat, user_id,"Analys");
+            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "mycotoxin-don",rezult2,toxin2b,lon, lat, user_id,"Analys");
         }
         if(toxin3==true){
-            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "Mycotoxin Zearalenone",rezult3,lon, lat, user_id,"Analys");
+            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "mycotoxin-zearalenone",rezult3,toxin3b,lon, lat, user_id,"Analys");
         }
         if(toxin4==true){
-            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "Mycotoxin Patulin",rezult4,lon, lat, user_id,"Analys");
+            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "mycotoxin-patulin",rezult4,toxin4b,lon, lat, user_id,"Analys");
         }
         if(toxin5==true){
-            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "Aflatoxin B1",rezult5,lon, lat, user_id,"Analys");
+            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "aflatoxin-b1",rezult5,toxin5b,lon, lat, user_id,"Analys");
         }
         if(toxin6==true){
-            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "Ochratoxin-A",rezult6,lon, lat, user_id,"Analys");
+            BioSensDatabaseHelper.insertMeasurement(db,ResearchId, data, data, "ochratoxin-a",rezult6,toxin6b,lon, lat, user_id,"Analys");
         }
 
 
@@ -226,7 +232,7 @@ cursor.close();
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("measurement",
-                    new String[]{"unit", "value","_id"},
+                    new String[]{"unit", "value","boundary_value","_id"},
                     "user_id= ? and research_id= ?",
                     new String[] {user_id,ResearchId},
                     null, null,null);
@@ -234,8 +240,8 @@ cursor.close();
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                     R.layout.fragment_res_item,
                     cursor,
-                    new String[]{"unit","value"},
-                    new int[]{R.id.Toxin_name,R.id.Rez_nameValue},
+                    new String[]{"unit","value","boundary_value"},
+                    new int[]{R.id.Toxin_name,R.id.Rez_nameValue,R.id.Rez_nameBValue},
                     0);
             ListView resList = (ListView)layout.findViewById(android.R.id.list);
 

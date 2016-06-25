@@ -59,7 +59,6 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "culture_id TEXT NOT NULL,"
                     + "user_id TEXT NOT NULL,"
                     + "have_toxin BOOLEAN NOT NULL,"
-                    + "toxin_level NUMERIC NOT NULL,"
                     + "description TEXT NOT NULL,"
                     + "sync BOOLEAN NOT NULL)"
 
@@ -71,6 +70,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "end_time TEXT NOT NULL,"
                     + "unit TEXT NOT NULL,"
                     + "value NUMERIC NOT NULL,"
+                    + "boundary_value NUMERIC NOT NULL,"
                     + "longitude NUMERIC NOT NULL,"
                     + "latitude NUMERIC NOT NULL,"
                     + "user_id TEXT NOT NULL,"
@@ -154,7 +154,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         cultValues.put("sync",sync);
         long rowid = db.insert("culture",null,cultValues);
     }
-    public static UUID insertResearch(SQLiteDatabase db, String place_id, String startTime, String endTime,String culture_id,String user_id, boolean haveToxin,double toxinLevel,String description){
+    public static UUID insertResearch(SQLiteDatabase db, String place_id, String startTime, String endTime,String culture_id,String user_id, boolean haveToxin,String description){
         ContentValues researchValues=new ContentValues();
         UUID research_uuid = UUID.randomUUID();
         boolean sync=false;
@@ -165,7 +165,6 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         researchValues.put("culture_id",culture_id);
         researchValues.put("user_id",user_id);
         researchValues.put("have_toxin",haveToxin);
-        researchValues.put("toxin_level",toxinLevel);
         researchValues.put("description",description);
         researchValues.put("sync",sync);
         db.insert("research",null,researchValues);
@@ -197,7 +196,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public static void insertMeasurement(SQLiteDatabase db, String research_id, String startTime, String endTime,String unit,double value,double Longitude, double Latitude, String user_id, String description){
+    public static void insertMeasurement(SQLiteDatabase db, String research_id, String startTime, String endTime,String unit,double value,double boundary_value,double Longitude, double Latitude, String user_id, String description){
         ContentValues measurementValues=new ContentValues();
         UUID test_uuid = UUID.randomUUID();
         boolean sync=false;
@@ -207,6 +206,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         measurementValues.put("end_time", endTime);
         measurementValues.put("unit",unit);
         measurementValues.put("value",value);
+        measurementValues.put("boundary_value",boundary_value);
         measurementValues.put("longitude",Longitude);
         measurementValues.put("latitude",Latitude);
         measurementValues.put("user_id",user_id);

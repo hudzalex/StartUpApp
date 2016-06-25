@@ -16,7 +16,7 @@ import android.widget.ImageView;
 public class WaitFragment extends Fragment {
     private int seconds=0;
     private boolean running;
-    int ResStartValue1=0,ResStartValue2=0,ResStartValue3=0,ResStartValue4=0,ResStartValue5=0,ResStartValue6=0 ;
+   double ResStartValue1=0,ResStartValue2=0,ResStartValue3=0,ResStartValue4=0,ResStartValue5=0,ResStartValue6=0 ;
     String ResearchId="" ;
     boolean toxin1=false;
     boolean toxin2=false;
@@ -29,12 +29,12 @@ public class WaitFragment extends Fragment {
                              Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            ResStartValue1 = bundle.getInt("ResStartValue1", 0);
-            ResStartValue2 = bundle.getInt("ResStartValue2", 0);
-            ResStartValue3 = bundle.getInt("ResStartValue3", 0);
-            ResStartValue4 = bundle.getInt("ResStartValue4", 0);
-            ResStartValue5 = bundle.getInt("ResStartValue5", 0);
-            ResStartValue6 = bundle.getInt("ResStartValue6", 0);
+            ResStartValue1 = bundle.getDouble("ResStartValue1", 0);
+            ResStartValue2 = bundle.getDouble("ResStartValue2", 0);
+            ResStartValue3 = bundle.getDouble("ResStartValue3", 0);
+            ResStartValue4 = bundle.getDouble("ResStartValue4", 0);
+            ResStartValue5 = bundle.getDouble("ResStartValue5", 0);
+            ResStartValue6 = bundle.getDouble("ResStartValue6", 0);
             ResearchId = bundle.getString("ResearchId", "");
             toxin1=bundle.getBoolean("Toxin1");
             toxin2=bundle.getBoolean("Toxin2");
@@ -71,12 +71,12 @@ public class WaitFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("ResearchId",ResearchId);
-                    bundle.putInt("ResStartValue1",ResStartValue1);
-                    bundle.putInt("ResStartValue2", ResStartValue2);
-                    bundle.putInt("ResStartValue3", ResStartValue3);
-                    bundle.putInt("ResStartValue4",ResStartValue4);
-                    bundle.putInt("ResStartValue5",ResStartValue5);
-                    bundle.putInt("ResStartValue6", ResStartValue6);
+                    bundle.putDouble("ResStartValue1",ResStartValue1);
+                    bundle.putDouble("ResStartValue2", ResStartValue2);
+                    bundle.putDouble("ResStartValue3", ResStartValue3);
+                    bundle.putDouble("ResStartValue4",ResStartValue4);
+                    bundle.putDouble("ResStartValue5",ResStartValue5);
+                    bundle.putDouble("ResStartValue6", ResStartValue6);
                     bundle.putBoolean("Toxin1", toxin1);
                     bundle.putBoolean("Toxin2", toxin2);
                     bundle.putBoolean("Toxin3", toxin3);
