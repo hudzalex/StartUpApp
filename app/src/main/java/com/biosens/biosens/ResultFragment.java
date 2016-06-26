@@ -16,8 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.biosens.biosens.BioSensDatabaseHelper;
@@ -37,72 +39,44 @@ public class ResultFragment extends ListFragment{
 
     // Session Manager Class
     SessionManagement session;
+   // String[] values = new String[]{""};
+    int i;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         session = new SessionManagement(inflater.getContext());
         HashMap<String, String> user = session.getUserDetails();
-
-
+        View layout=inflater.inflate(R.layout.list_layout, container, false);
+        i=0;
         String user_id = user.get(SessionManagement.KEY_ID);
 
         try {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
             db = biosensDatabaseHelper.getReadableDatabase();
-            String query = "SELECT research._id,research.place_id, research.culture_id,research.end_time,research.have_toxin, place.place_name FROM research INNER JOIN place ON research.place_id = place._id where research.user_id= ?";
-            String query1 = "SELECT place.place_name from research inner join place on research.place_id = place._id where research.user_id= ?";
+            String query = "SELECT research._id FROM research where research.user_id= ?";
 
-            cursor=db.rawQuery(query1,new String[] {user_id});
-          /*  cursor = db.query("research",
-                    new String[]{"_id","place_id", "culture_id","end_time","have_toxin"},
-                    "user_id= ?",
-                    new String[] {user_id},
-                    null, null,"rowid DESC");*/
-/*cursor.moveToFirst();
-            if(!cursor.isAfterLast()){
+
+            cursor=db.rawQuery(query,new String[] {user_id});
+            String[] values = new String[cursor.getCount()];
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()){
                 do{
-                    Date=cursor.getString(3);
-                    haveToxin=cursor.getInt(4);
-                    plase_id=cursor.getString(1);
-                    try {
-                        SQLiteOpenHelper biosensDatabaseHelper1 = new BioSensDatabaseHelper(inflater.getContext());
-                        db = biosensDatabaseHelper1.getReadableDatabase();
 
-                        cursor1 = db.query("place",
-                                new String[]{"_id", "place_name","photo"},
-                                "user_id= ? and _id= ?",
-                                new String[]{user_id, plase_id},
-                                null, null, null);
-                    }catch(SQLiteException e) {
-                        Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                    placeName=cursor1.getString(1);
-                    placePhoto=cursor1.getInt(2);
-                    if(haveToxin==1){
-                        ImageId=R.drawable.fail;
-                        ListText="Toxins detected";
-
-
-                    }
-                    else{
-                        ImageId=R.drawable.success;
-                        ListText="Toxins not detected";
-
-                    }
+                   values[i]=cursor.getString(0);
+                    i++;
                 }
-
-
                 while (cursor.moveToNext());
-            }*/
+            }
 
-            CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
+            ResListAdapter adapter = new ResListAdapter(inflater.getContext(), values);
+            setListAdapter(adapter);
+            /*CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                     R.layout.list_layout,
                     cursor,
-                    new String[]{"place_name","end_time","have_toxin"},
+                    new String[]{"place.name","research.end_time","research.have_toxin"},
                     new int[]{R.id.field_name,R.id.date_rez,R.id.list_rez},
                     0);
-            setListAdapter(listAdapter);
+            setListAdapter(listAdapter);*/
 
         } catch(SQLiteException e) {
             Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);
