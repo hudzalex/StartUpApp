@@ -333,6 +333,19 @@ public class BluetoothLeService extends Service {
             mBluetoothGatt.setCharacteristicNotification(mReadCharacteristic, true);
         }
 
+
+        mReadCharacteristic.setValue("m");
+        if(mBluetoothGatt.writeCharacteristic(mReadCharacteristic) == false){
+            Log.w(TAG, "Failed to read characteristic");
+        }
+
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException ex) {}
+
+
+
        mBluetoothGatt.readCharacteristic(mReadCharacteristic);
 
 

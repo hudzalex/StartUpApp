@@ -4,6 +4,9 @@ import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,10 +19,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.os.AsyncTaskCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +39,12 @@ import android.widget.Toast;
 import com.biosens.biosens.BioSensDatabaseHelper;
 import com.biosens.biosens.R;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InterruptedIOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -179,43 +189,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+
+    ReadMeasurementBluetoothTask bluetoothTask;
+
+
     @Override
     public void onClick(View v) {
-    // rez = someEventListener.someEvent();
-boolean haveToxin=false;
 
+        final SQLiteCursor selectedItem= (SQLiteCursor)spinner.getSelectedItem();
+        final String placeId = selectedItem.getString(0);
 
-        new ReadMeasurementBluetoothTask(new ReadMeasurementBluetoothTask.ReadMeasurementBluetoothCallback(){
-            @Override
-            public void onMeasurement(double[] result) {
-                rez1 = result[0];
-                rez2 = result[1];
-                rez3 = result[2];
-                rez4 = result[3];
-                rez5 = result[4];
-                rez6 = result[5];
-            }
-        }).execute();
-
-
-
-
-
-        //EditText testEditText = (EditText) getActivity().findViewById(R.id.editTextToxity);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-        dateFormat.setTimeZone(utc);
-
-        Calendar c = Calendar.getInstance();
-        String data=dateFormat.format(c.getTime());
-
-        SQLiteCursor selectedItem= (SQLiteCursor)spinner.getSelectedItem();
-        String placeId = selectedItem.getString(0);
-//        String placeName = selectedItem.getString(1);
-
-
-
-        String researchId = BioSensDatabaseHelper.insertResearch(db, placeId, data, data, CultureId, user_id,haveToxin,"Analys").toString();
 
         if(checkBoxToxity1.isChecked()){
             toxin1=true;
@@ -236,28 +219,85 @@ boolean haveToxin=false;
             toxin6=true;
         }
 
-       // BioSensDatabaseHelper.insertMeasurement(db,researchId.toString(), data, data, "Mycotoxin T2",rez,lon, lat, user_id,"Analys");
-      //  BioSensDatabaseHelper.insertTest(db, rez, placeName, data, cultureEditText.getText().toString(), "Mycotoxin T2",ListText ,ImageId,PrevImageId, lon, lat, user_id);
-        Bundle bundle = new Bundle();
-        bundle.putString("ResearchId", researchId);
-        bundle.putDouble("ResStartValue1", rez1);
-        bundle.putDouble("ResStartValue2", rez2);
-        bundle.putDouble("ResStartValue3", rez3);
-        bundle.putDouble("ResStartValue4", rez4);
-        bundle.putDouble("ResStartValue5", rez5);
-        bundle.putDouble("ResStartValue6", rez6);
-        bundle.putBoolean("Toxin1", toxin1);
-        bundle.putBoolean("Toxin2", toxin2);
-        bundle.putBoolean("Toxin3", toxin3);
-        bundle.putBoolean("Toxin4", toxin4);
-        bundle.putBoolean("Toxin5", toxin5);
-        bundle.putBoolean("Toxin6", toxin6);
-        WaitFragment Wfragment =new WaitFragment();
-        Wfragment.setArguments(bundle);
-        FragmentTransaction ftranssct=getFragmentManager().beginTransaction();
+        AsyncTask<Void,Void,Void> genericTask = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
 
-        ftranssct.replace(R.id.container, Wfragment );
-        ftranssct.commit();
+                    double[] result = ReadMeasurementBluetoothTask.measure();
+
+                    rez1 = result[0];
+                    rez2 = result[1];
+                    rez3 = result[2];
+                    rez4 = result[3];
+                    rez5 = result[4];
+                    rez6 = result[5];
+
+
+
+                    boolean haveToxin=false;
+
+
+
+
+
+                    //EditText testEditText = (EditText) getActivity().findViewById(R.id.editTextToxity);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                    TimeZone utc = TimeZone.getTimeZone("UTC");
+                    dateFormat.setTimeZone(utc);
+
+                    Calendar c = Calendar.getInstance();
+                    String data=dateFormat.format(c.getTime());
+
+//        String placeName = selectedItem.getString(1);
+
+
+
+                    String researchId = BioSensDatabaseHelper.insertResearch(db, placeId, data, data, CultureId, user_id,haveToxin,"Analys").toString();
+
+
+                    // BioSensDatabaseHelper.insertMeasurement(db,researchId.toString(), data, data, "Mycotoxin T2",rez,lon, lat, user_id,"Analys");
+                    //  BioSensDatabaseHelper.insertTest(db, rez, placeName, data, cultureEditText.getText().toString(), "Mycotoxin T2",ListText ,ImageId,PrevImageId, lon, lat, user_id);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ResearchId", researchId);
+                    bundle.putDouble("ResStartValue1", rez1);
+                    bundle.putDouble("ResStartValue2", rez2);
+                    bundle.putDouble("ResStartValue3", rez3);
+                    bundle.putDouble("ResStartValue4", rez4);
+                    bundle.putDouble("ResStartValue5", rez5);
+                    bundle.putDouble("ResStartValue6", rez6);
+                    bundle.putBoolean("Toxin1", toxin1);
+                    bundle.putBoolean("Toxin2", toxin2);
+                    bundle.putBoolean("Toxin3", toxin3);
+                    bundle.putBoolean("Toxin4", toxin4);
+                    bundle.putBoolean("Toxin5", toxin5);
+                    bundle.putBoolean("Toxin6", toxin6);
+                    WaitFragment Wfragment =new WaitFragment();
+                    Wfragment.setArguments(bundle);
+                    FragmentTransaction ftranssct=getFragmentManager().beginTransaction();
+
+                    ftranssct.replace(R.id.container, Wfragment );
+                    ftranssct.commit();
+
+
+                } catch (InterruptedException e) {
+
+                }
+
+                return null;
+            }
+        };
+
+        genericTask.execute();
+
+
+//        AsyncTaskCompat.executeParallel( bluetoothTask );
+
+//        bluetoothTask.execute();
+
+
+
+
     }
 
 }
