@@ -45,12 +45,12 @@ public class WaitFragment extends Fragment {
     SQLiteOpenHelper biosensDatabaseHelper;
     String placeId = "", user_id = "", CultureId = "";
     private double rez1, rez2, rez3, rez4, rez5, rez6;
-    double toxin1b = 10.0;
-    double toxin2b = 10.0;
-    double toxin3b = 10.0;
-    double toxin4b = 10.0;
-    double toxin5b = 10.0;
-    double toxin6b = 10.0;
+    double toxin1b = .1;
+    double toxin2b = .1;
+    double toxin3b = .1;
+    double toxin4b = .1;
+    double toxin5b = .1;
+    double toxin6b = .1;
     private LocationManager locationManager;
     private double lat, lon;
     private static final int INITIAL_REQUEST = 1337;
@@ -189,7 +189,7 @@ public class WaitFragment extends Fragment {
                     public void run() {
                         onWaitTimeElapsed();
                     }
-                }, 10000);
+                }, 1000 * 60 * 10);
 
                 return null;
             }
@@ -289,12 +289,12 @@ public class WaitFragment extends Fragment {
             rez6 = result[5];
 
 
-            double rezult1 = rez1 - ResStartValue1;
-            double rezult2 = rez2 - ResStartValue2;
-            double rezult3 = rez3 - ResStartValue3;
-            double rezult4 = rez4 - ResStartValue4;
-            double rezult5 = rez5 - ResStartValue5;
-            double rezult6 = rez6 - ResStartValue6;
+            double rezult1 = (rez1 - ResStartValue1) >= 30 ? 1 : .01;
+            double rezult2 = (rez2 - ResStartValue2) >= 30 ? 1 : .01;
+            double rezult3 = (rez3 - ResStartValue3) >= 30 ? 1 : .01;
+            double rezult4 = (rez4 - ResStartValue4) >= 30 ? 1 : .01;
+            double rezult5 = (rez5 - ResStartValue5) >= 30 ? 1 : .01;
+            double rezult6 = (rez6 - ResStartValue6) >= 30 ? 1 : .01;
 
             rezult1 = rezult1 < 0 ? 0 : rezult1;
             rezult2 = rezult1 < 0 ? 0 : rezult2;
