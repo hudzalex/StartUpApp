@@ -29,6 +29,7 @@ public class ResListAdapter extends ArrayAdapter<String> {
         this.values = values;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
@@ -40,13 +41,17 @@ public class ResListAdapter extends ArrayAdapter<String> {
 
         ImageView photo = (ImageView) rowView.findViewById(R.id.list_image);
         ImageView prev_image = (ImageView) rowView.findViewById(R.id.prev_image);
-for(int i=0;i<values.length;i++) {
+
+
+
+
+
     SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
     db = biosensDatabaseHelper.getReadableDatabase();
     String query = "SELECT research._id,research.place_id, research.culture_id,research.end_time,research.have_toxin, place.name,place.photo FROM research INNER JOIN place ON research.place_id = place._id where research._id= ?";
 
 
-    cursor = db.rawQuery(query, new String[]{values[i]});
+    cursor = db.rawQuery(query, new String[]{values[position]});
     cursor.moveToFirst();
     if (!cursor.isAfterLast()) {
         haveToxin = cursor.getInt(4);
@@ -72,8 +77,6 @@ for(int i=0;i<values.length;i++) {
         photo.setContentDescription("Rez Photo");
 
     }
-
-}
         return rowView;
     }
 }

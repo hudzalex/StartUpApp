@@ -53,10 +53,10 @@ public class ResultFragment extends ListFragment{
         try {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
             db = biosensDatabaseHelper.getReadableDatabase();
-            String query = "SELECT research._id FROM research where research.user_id= ?";
+            String query = "SELECT research._id FROM research";
 
 
-            cursor=db.rawQuery(query,new String[] {user_id});
+            cursor=db.rawQuery(query,new String[] {});
             String[] values = new String[cursor.getCount()];
             cursor.moveToFirst();
             if (!cursor.isAfterLast()){
@@ -90,8 +90,7 @@ public class ResultFragment extends ListFragment{
                                 View v,
                                 int position,
                                 long id) {
-       Cursor cursorList = (Cursor) l.getItemAtPosition(position);
-        String Id = cursorList.getString(cursorList.getColumnIndexOrThrow("_id"));
+        String Id = (String)l.getItemAtPosition(position);
         Bundle bundle = new Bundle();
 
         bundle.putString("row_id", Id);

@@ -75,7 +75,7 @@ String userid;
 
         isRunning = true;
 
-        //schedule(15000);
+        schedule(1000);
     }
 
     private void schedule(int period) {
@@ -104,7 +104,8 @@ String userid;
 
     @Override
     public void run() {
-        int period = 15000;
+//        int period = 15000;
+        int period = 1000;
 
         if (isRunning) {
 
@@ -154,32 +155,33 @@ String userid;
 //                    do {
                     String s = cursor.getString(1);
                     String a = cursor.getString(6);
-                    URL url = new URL("http://httpbin.org/post");
+                    final URL url;
                     //                  RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                     Map<String, String> jsonParams = new HashMap<String, String>();
                     if(countTables==0){
                         id = cursor.getString(0);
-                        jsonParams.put("id", id);
+
+                        url = new URL("http://192.168.88.122:5000/api/place/" + id);
                         jsonParams.put("name", cursor.getString(1));
                         jsonParams.put("longitude", String.valueOf(cursor.getDouble(2)));
                         jsonParams.put("latitude", String.valueOf(cursor.getDouble(3)));
                         jsonParams.put("userId", cursor.getString(4));
-                        jsonParams.put("photo", String.valueOf(cursor.getInt(5)));
+                        //jsonParams.put("photo", String.valueOf(cursor.getInt(5)));
 
                     } else if(countTables==1){
                         id = cursor.getString(0);
-                        jsonParams.put("id", id);
+                        url = new URL("http://192.168.88.122:5000/api/research/" + id);
                         jsonParams.put("placeId", cursor.getString(1));
                         jsonParams.put("startTime", cursor.getString(2));
                         jsonParams.put("endTime", cursor.getString(3));
                         jsonParams.put("cultureId", cursor.getString(4));
                         jsonParams.put("userId", cursor.getString(5));
-                        jsonParams.put("haveToxin",cursor.getString(6));
+                        jsonParams.put("haveToxin", (cursor.getString(6).equals("1") || cursor.getString(6).equals( "true")) ? "true" : "false");
                         jsonParams.put("description",cursor.getString(7));
 
                     }else if(countTables==2){
                         id = cursor.getString(0);
-                        jsonParams.put("id", id);
+                        url = new URL("http://192.168.88.122:5000/api/measurement/" + id);
                         jsonParams.put("researchId", cursor.getString(1));
                         jsonParams.put("startTime", cursor.getString(2));
                         jsonParams.put("endTime", cursor.getString(3));
@@ -191,25 +193,31 @@ String userid;
                         jsonParams.put("userId",cursor.getString(9));
                         jsonParams.put("description",cursor.getString(10));
 
-                    }else if(countTables==3){
-                        id = cursor.getString(0);
-                        jsonParams.put("id", id);
-                        jsonParams.put("name", cursor.getString(1));
-                        jsonParams.put("userId", cursor.getString(2));
-                        jsonParams.put("photo", String.valueOf(cursor.getInt(3)));
-
+                    } else {
+                        throw new Exception("Invalid countTable");
                     }
+//                    else if(countTables==3){
+//                        id = cursor.getString(0);
+//                        jsonParams.put("id", id);
+//                        jsonParams.put("name", cursor.getString(1));
+//                        jsonParams.put("userId", cursor.getString(2));
+//                        jsonParams.put("photo", String.valueOf(cursor.getInt(3)));
+//
+//                    }
 
 
                     String json = new JSONObject(jsonParams).toString();
 
+                    Log.d("HttpService", "PUT " + url);
+                    Log.d("HttpService", json);
 
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setReadTimeout(10000);
                     conn.setConnectTimeout(15000);
-                    conn.setRequestMethod("POST");
+                    conn.setRequestMethod("PUT");
                     conn.setDoInput(true);
                     conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type", "application/json");
 
                     OutputStream os = conn.getOutputStream();
                     BufferedWriter writer = new BufferedWriter(
@@ -222,8 +230,9 @@ String userid;
 
                     int responseCode = conn.getResponseCode();
                     String response = "";
-                    if (responseCode == HttpsURLConnection.HTTP_OK) {
-                        BioSensDatabaseHelper. updateSync(db,tableName,userid, id,true);
+                    Log.d("HttpService", "HTTP response " + responseCode);
+                    if (responseCode == HttpsURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                        BioSensDatabaseHelper. updateSync(db,tableName, id,true);
 
                         String line;
                         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -232,25 +241,7 @@ String userid;
                         }
                     }
 
-                    Log.d("HttpService", "Response " + response);
                     period = 1000;
-//                        JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, url,
-//                                new JSONObject(jsonParams),
-//                                new Response.Listener<JSONObject>() {
-//                                    @Override
-//                                    public void onResponse(JSONObject response) {
-//                                        Log.d("HttpService", "Response " + String.valueOf(response));
-//
-//                                        timer.scheduleAtFixedRate(new mainTask(), 0, 1000);
-//                                    }
-//                                },
-//                                new Response.ErrorListener() {
-//                                    @Override
-//                                    public void onErrorResponse(VolleyError error) {
-//                                        timer.scheduleAtFixedRate(new mainTask(), 0, 15000);
-//                                    }
-//                                });
-//                        queue.add(postRequest);
 
                     toastHandler.sendEmptyMessage(0);
 
@@ -268,7 +259,7 @@ String userid;
                 }
             }
 
-            if(countTables>=3)
+            if(countTables>=2)
             {countTables=0;}
             else{countTables++;}
 

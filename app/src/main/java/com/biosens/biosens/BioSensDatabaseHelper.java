@@ -172,14 +172,15 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         return research_uuid;
     }
 
-    public static void updateResearch(SQLiteDatabase db, String user_id, String Id, boolean haveToxin){
+    public static void updateResearch(SQLiteDatabase db, String Id, boolean haveToxin){
         ContentValues researchValues=new ContentValues();
 
         researchValues.put("have_toxin",haveToxin);
+        researchValues.put("sync",false);
 
 
-        String where = "user_id=? and _id=?";
-        String[] whereArgs = new String[] {user_id, Id};
+        String where = " _id=?";
+        String[] whereArgs = new String[] { Id};
 
 
         db.update("research", researchValues, where, whereArgs);
@@ -187,11 +188,11 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
 
 
     }
-    public static void updateSync(SQLiteDatabase db, String TtableName, String user_id,  String Id, boolean sync){
+    public static void updateSync(SQLiteDatabase db, String TtableName, String Id, boolean sync){
         ContentValues updateSync=new ContentValues();
         updateSync.put("sync",sync);
-        String where = "user_id=? and _id=?";
-        String[] whereArgs = new String[] {user_id, Id};
+        String where = "_id=?";
+        String[] whereArgs = new String[] {Id};
         db.update(TtableName, updateSync, where, whereArgs);
     }
 

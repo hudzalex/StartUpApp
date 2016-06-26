@@ -105,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double longlat = cursor.getDouble(0);
                 double lat = cursor.getDouble(1);
                 LatLng rezPositions = new LatLng(lat,longlat);
-                if(cursor.getInt(2)==0){
+                if(cursor.getDouble(2) < 10){
                     mMap.addMarker(new MarkerOptions().position(rezPositions ).title("Toxin are not found | Date "+cursor.getString(3)+" | Unit "+cursor.getString(4)).icon(
                         BitmapDescriptorFactory
                                 .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));}

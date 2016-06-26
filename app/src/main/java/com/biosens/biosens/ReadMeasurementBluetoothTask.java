@@ -12,10 +12,35 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class ReadMeasurementBluetoothTask {
+    static final boolean random = false;
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     static final String deviceAddress = "20:16:01:05:89:69";
 
-    public static double[] measure() throws InterruptedException {
+
+    private static double[] generate(double min, double max){
+
+        double[] randomResult = new double[7];
+
+        for (int i = 0; i < randomResult.length; i++) {
+            randomResult[i] = Math.floor((max - min) * Math.random() + min);
+        }
+
+        return randomResult;
+    }
+
+    public static double[] measure2() throws InterruptedException {
+        if (random) {
+            return generate(5, 50);
+        } else {
+            return measure();
+        }
+    }
+
+        public static double[] measure() throws InterruptedException {
+        if (random) {
+            return generate(0, 0);
+        }
+
         double[] result;
 
         while (true) {

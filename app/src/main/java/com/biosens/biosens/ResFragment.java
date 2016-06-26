@@ -42,30 +42,13 @@ public class ResFragment extends ListFragment {
     SQLiteOpenHelper biosensDatabaseHelper;
     Cursor cursor;
     SessionManagement session;
-    private LocationManager locationManager;
-    private double lat, lon;
+
     final Random random = new Random();
-    double ResStartValue1 = 0, ResStartValue2 = 0, ResStartValue3 = 0, ResStartValue4 = 0, ResStartValue5 = 0, ResStartValue6 = 0;
-    String ResearchId = "";
-    boolean toxin1 = false;
-    boolean toxin2 = false;
-    boolean toxin3 = false;
-    boolean toxin4 = false;
-    boolean toxin5 = false;
-    boolean toxin6 = false;
-    double toxin1b = 5.0;
-    double toxin2b = 8.0;
-    double toxin3b = 2.0;
-    double toxin4b = 4.0;
-    double toxin5b = 4.0;
-    double toxin6b = 1.0;
-    double rez1, rez2, rez3, rez4, rez5, rez6;
+   int ImageId;
+    String ResearchId = "", ListText="";
 
 
-    private static final int INITIAL_REQUEST = 1337;
-    private static final int CAMERA_REQUEST = INITIAL_REQUEST + 1;
-    private static final int CONTACTS_REQUEST = INITIAL_REQUEST + 2;
-    private static final int LOCATION_REQUEST = INITIAL_REQUEST + 3;
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -80,116 +63,20 @@ public class ResFragment extends ListFragment {
         final String user_id = user.get(SessionManagement.KEY_ID);
 
 
-        locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Enable GPS", Toast.LENGTH_SHORT);
-            toast.show();
-            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-
-        }
-
-        boolean haveLocationPermission = ContextCompat.checkSelfPermission(inflater.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-
-        if (haveLocationPermission) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    1000 * 10, 10, locationListener);
-
-
-            locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
-                    locationListener);
-        } else {
-            // requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
-        }
 
 
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            ResStartValue1 = bundle.getDouble("ResStartValue1", 0);
-            ResStartValue2 = bundle.getDouble("ResStartValue2", 0);
-            ResStartValue3 = bundle.getDouble("ResStartValue3", 0);
-            ResStartValue4 = bundle.getDouble("ResStartValue4", 0);
-            ResStartValue5 = bundle.getDouble("ResStartValue5", 0);
-            ResStartValue6 = bundle.getDouble("ResStartValue6", 0);
+
             ResearchId = bundle.getString("ResearchId", "");
-            toxin1 = bundle.getBoolean("Toxin1");
-            toxin2 = bundle.getBoolean("Toxin2");
-            toxin3 = bundle.getBoolean("Toxin3");
-            toxin4 = bundle.getBoolean("Toxin4");
-            toxin5 = bundle.getBoolean("Toxin5");
-            toxin6 = bundle.getBoolean("Toxin6");
+            ListText = bundle.getString("ListText", "");
+            ImageId = bundle.getInt("ImageId", 0);
+
 
         }
 
 
-        new AsyncTask<Void,Void,Void>(){
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-
-                    boolean haveToxin = false;
-                    final String ListText;
-
-                    double[] result = ReadMeasurementBluetoothTask.measure();
-
-                    rez1 = result[0];
-                    rez2 = result[1];
-                    rez3 = result[2];
-                    rez4 = result[3];
-                    rez5 = result[4];
-                    rez6 = result[5];
-
-
-
-                    double rezult1 = rez1 - ResStartValue1;
-                    double rezult2 = rez2 - ResStartValue2;
-                    double rezult3 = rez3 - ResStartValue3;
-                    double rezult4 = rez4 - ResStartValue4;
-                    double rezult5 = rez5 - ResStartValue5;
-                    double rezult6 = rez6 - ResStartValue6;
-                    biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
-                    db = biosensDatabaseHelper.getWritableDatabase();
-
-                    final int ImageId;
-                    if ((rezult1 > toxin1b && toxin1 == true) || (rezult2 > toxin2b && toxin2 == true) || (rezult3 > toxin3b && toxin3 == true) || (rezult4 > toxin4b && toxin4 == true) || (rezult5 > toxin5b && toxin5 == true) || (rezult6 > toxin6b && toxin6 == true)) {
-                        ImageId = R.drawable.fail;
-                        ListText = "Toxins detected";
-                        BioSensDatabaseHelper.updateResearch(db, user_id, ResearchId, true);
-
-                    } else {
-                        ImageId = R.drawable.success;
-                        ListText = "Toxins not detected";
-
-                    }
-
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                    TimeZone utc = TimeZone.getTimeZone("UTC");
-                    dateFormat.setTimeZone(utc);
-
-                    Calendar c = Calendar.getInstance();
-                    String data = dateFormat.format(c.getTime());
-
-
-                    if (toxin1 == true) {
-                        BioSensDatabaseHelper.insertMeasurement(db, ResearchId, data, data, "mycotoxin-t2", rezult1, toxin1b, lon, lat, user_id, "Analys");
-                        // if(rezult1>toxin1b){}
-                    }
-                    if (toxin2 == true) {
-                        BioSensDatabaseHelper.insertMeasurement(db, ResearchId, data, data, "mycotoxin-don", rezult2, toxin2b, lon, lat, user_id, "Analys");
-                    }
-                    if (toxin3 == true) {
-                        BioSensDatabaseHelper.insertMeasurement(db, ResearchId, data, data, "mycotoxin-zearalenone", rezult3, toxin3b, lon, lat, user_id, "Analys");
-                    }
-                    if (toxin4 == true) {
-                        BioSensDatabaseHelper.insertMeasurement(db, ResearchId, data, data, "mycotoxin-patulin", rezult4, toxin4b, lon, lat, user_id, "Analys");
-                    }
-                    if (toxin5 == true) {
-                        BioSensDatabaseHelper.insertMeasurement(db, ResearchId, data, data, "aflatoxin-b1", rezult5, toxin5b, lon, lat, user_id, "Analys");
-                    }
-                    if (toxin6 == true) {
-                        BioSensDatabaseHelper.insertMeasurement(db, ResearchId, data, data, "ochratoxin-a", rezult6, toxin6b, lon, lat, user_id, "Analys");
-                    }
 
 
                     try {
@@ -198,8 +85,8 @@ public class ResFragment extends ListFragment {
 
                         cursor = db.query("research",
                                 new String[]{"place_id", "end_time"},
-                                "user_id= ? and _id= ?",
-                                new String[]{user_id, ResearchId},
+                                "_id= ?",
+                                new String[]{ResearchId},
                                 null, null, null);
 
 
@@ -258,9 +145,7 @@ public class ResFragment extends ListFragment {
                         return null;
                     }
 
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
+
 
                             TextView fieldName = (TextView) layout.findViewById(R.id.field_name);
                             TextView DateRez = (TextView) layout.findViewById(R.id.date_rez);
@@ -283,60 +168,12 @@ public class ResFragment extends ListFragment {
                             ListView resList = (ListView) layout.findViewById(android.R.id.list);
 
                             resList.setAdapter(listAdapter);
-                        }
-                    });
-                } catch (InterruptedException ex){
-
-                }
-
-                return null;
-            }
-        }.execute();
 
 
         return layout;
     }
 
-    private LocationListener locationListener = new LocationListener() {
 
-        @Override
-        public void onLocationChanged(Location location) {
-            showLocation(location);
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-            if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED)
-                showLocation(locationManager.getLastKnownLocation(provider));
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-    };
-
-    private void showLocation(Location location) {
-        if (location == null)
-            return;
-        if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
-            lat = location.getLatitude();
-            lon = location.getLongitude();
-
-        } else if (location.getProvider().equals(
-                LocationManager.NETWORK_PROVIDER)) {
-            lat = location.getLatitude();
-            lon = location.getLongitude();
-
-        }
-    }
 
 
 }
