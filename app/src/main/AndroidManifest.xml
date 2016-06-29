@@ -14,9 +14,9 @@
          location permissions for the 'MyLocation' functionality. 
     -->
 
-    <permission
-        android:name="com.example.locationgooglemapsv2.permission.MAPS_RECIEVE"
-        android:protectionLevel="signature" />
+    <!--<permission-->
+        <!--android:name="com.example.locationgooglemapsv2.permission.MAPS_RECIEVE"-->
+        <!--android:protectionLevel="signature" />-->
 
     <uses-permission android:name="com.example.locationgooglemapsv2.permission.MAPS_RECIEVE" />
     <uses-permission android:name="android.permission.INTERNET" />

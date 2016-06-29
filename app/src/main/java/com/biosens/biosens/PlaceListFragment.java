@@ -88,11 +88,11 @@ public class PlaceListFragment extends ListFragment {
                                 int position,
                                 long id) {
         Cursor cursorList = (Cursor) l.getItemAtPosition(position);
-        int Id = Integer.valueOf(cursorList.getString(cursorList.getColumnIndexOrThrow("_id")));
+        String Id = cursorList.getString(cursorList.getColumnIndexOrThrow("_id"));
         Bundle bundle = new Bundle();
 
-        bundle.putInt("row_id", Id);
-        ListResFragment fragInfo = new  ListResFragment();
+        bundle.putString("row_id", Id);
+        PlaceRezFragment fragInfo = new  PlaceRezFragment();
         fragInfo.setArguments(bundle);
         FragmentTransaction ftransact=getFragmentManager().beginTransaction();
         ftransact.replace(R.id.container,fragInfo);
