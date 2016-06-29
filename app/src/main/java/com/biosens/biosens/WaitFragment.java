@@ -22,11 +22,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 
 public class WaitFragment extends Fragment {
@@ -57,6 +62,7 @@ public class WaitFragment extends Fragment {
     private static final int CAMERA_REQUEST = INITIAL_REQUEST + 1;
     private static final int CONTACTS_REQUEST = INITIAL_REQUEST + 2;
     private static final int LOCATION_REQUEST = INITIAL_REQUEST + 3;
+    int time = 60 * 10;
     String researchId = "";
     int ImageId;
     String ListText;
@@ -87,6 +93,8 @@ public class WaitFragment extends Fragment {
 
         }
     };
+    private ScheduledExecutorService scheduler;
+    private ScheduledFuture<?> handle;
 
     private void showLocation(Location location) {
         if (location == null)
@@ -167,13 +175,13 @@ public class WaitFragment extends Fragment {
         // Load the ImageView that will host the animation and
         // set its background to our AnimationDrawable XML resource.
         ImageView img = (ImageView) layout.findViewById(R.id.animationContainer);
-        img.setBackgroundResource(R.drawable.tube_animation);
+        img.setBackgroundResource(R.drawable.tube_00);
 
         // Get the background, which has been compiled to an AnimationDrawable object.
-        AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();
-
-        // Start the animation (looped playback by default).
-        frameAnimation.start();
+//        AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();
+//
+//        // Start the animation (looped playback by default).
+//        frameAnimation.start();
 
 
 
@@ -182,14 +190,43 @@ public class WaitFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 measure1();
 
-                final Handler handler = new Handler(Looper.getMainLooper());
 
-                handler.postDelayed(new Runnable() {
+                scheduler = Executors.newSingleThreadScheduledExecutor();
+                handle = scheduler.scheduleWithFixedDelay(new Runnable() {
                     @Override
                     public void run() {
-                        onWaitTimeElapsed();
+                        final Handler handler = new Handler(Looper.getMainLooper());
+
+                        time--;
+
+                        if (time > 0){
+
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TextView textTime = (TextView)getActivity().findViewById(R.id.text_time);
+                                    int min = time / 60;
+                                    int sec = time % 60;
+                                    textTime.setText("00:" + String.format("%02d", min) + ":" + String.format("%02d", sec));
+                                }
+                            });
+                        } else {
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    handle.cancel(false);
+                                    TextView textTime = (TextView)getActivity().findViewById(R.id.text_time);
+                                    textTime.setText("Measure #2");
+                                    onWaitTimeElapsed();
+                                }
+                            });
+                        }
                     }
-                }, 1000 * 60 * 10);
+                }, 1, 1, TimeUnit.SECONDS);
+
+
 
                 return null;
             }
@@ -289,12 +326,12 @@ public class WaitFragment extends Fragment {
             rez6 = result[5];
 
 
-            double rezult1 = (rez1 - ResStartValue1) >= 30 ? 1 : .01;
-            double rezult2 = (rez2 - ResStartValue2) >= 30 ? 1 : .01;
-            double rezult3 = (rez3 - ResStartValue3) >= 30 ? 1 : .01;
-            double rezult4 = (rez4 - ResStartValue4) >= 30 ? 1 : .01;
-            double rezult5 = (rez5 - ResStartValue5) >= 30 ? 1 : .01;
-            double rezult6 = (rez6 - ResStartValue6) >= 30 ? 1 : .01;
+            double rezult1 = (rez1 - ResStartValue1) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
+            double rezult2 = (rez2 - ResStartValue2) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
+            double rezult3 = (rez3 - ResStartValue3) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
+            double rezult4 = (rez4 - ResStartValue4) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
+            double rezult5 = (rez5 - ResStartValue5) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
+            double rezult6 = (rez6 - ResStartValue6) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
 
             rezult1 = rezult1 < 0 ? 0 : rezult1;
             rezult2 = rezult1 < 0 ? 0 : rezult2;
@@ -329,25 +366,25 @@ public class WaitFragment extends Fragment {
             String data = dateFormat.format(c.getTime());
 
 
-            if (toxin1 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult1, toxin1b, lon, lat, user_id, "Analys");
-                // if(rezult1>toxin1b){}
-            }
+//            if (toxin1 == true) {
+//                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult1, toxin1b, lon, lat, user_id, "Analys");
+//                // if(rezult1>toxin1b){}
+//            }
             if (toxin2 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-don", rezult2, toxin2b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult2, toxin2b, lon, lat, user_id, "Analys");
             }
             if (toxin3 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-zearalenone", rezult3, toxin3b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult3, toxin3b, lon, lat, user_id, "Analys");
             }
-            if (toxin4 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-patulin", rezult4, toxin4b, lon, lat, user_id, "Analys");
-            }
-            if (toxin5 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-b1", rezult5, toxin5b, lon, lat, user_id, "Analys");
-            }
-            if (toxin6 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a", rezult6, toxin6b, lon, lat, user_id, "Analys");
-            }
+//            if (toxin4 == true) {
+//                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-patulin", rezult4, toxin4b, lon, lat, user_id, "Analys");
+//            }
+//            if (toxin5 == true) {
+//                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-b1", rezult5, toxin5b, lon, lat, user_id, "Analys");
+//            }
+//            if (toxin6 == true) {
+//                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a", rezult6, toxin6b, lon, lat, user_id, "Analys");
+//            }
         } catch (InterruptedException ex) {
 
         }

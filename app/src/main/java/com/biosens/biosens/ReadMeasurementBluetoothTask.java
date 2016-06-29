@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class ReadMeasurementBluetoothTask {
-    static final boolean random = false;
+    static final boolean random = true;
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     static final String deviceAddress = "20:16:01:05:89:69";
 
@@ -29,17 +29,23 @@ public class ReadMeasurementBluetoothTask {
     }
 
     public static double[] measure2() throws InterruptedException {
-        if (random) {
-            return generate(5, 50);
-        } else {
-            return measure();
-        }
+        //if (random) {
+        //    return generate(5, 50);
+        //} else {
+            return realMeasure();
+        //}
     }
 
-        public static double[] measure() throws InterruptedException {
+    public static double[] measure() throws InterruptedException {
         if (random) {
-            return generate(0, 0);
+            return new double[]{0,0,0,0,0,0,0};
         }
+
+        return realMeasure();
+    }
+
+
+    private static double[] realMeasure() throws InterruptedException {
 
         double[] result;
 
@@ -87,11 +93,11 @@ public class ReadMeasurementBluetoothTask {
 
                 int i = 0;
                 for (Double num : resultNum) {
-                    if (i == 0) {
-                        result[i] = 0.22950819672131 * num - 5.1475409836066;
-                    } else {
-                        result[i] = 0;
-                    }
+//                    if (i == 0) {
+//                        result[i] = 0.22950819672131 * num - 5.1475409836066;
+//                    } else {
+                        result[i] = num;
+//                    }
                     i++;
                 }
 

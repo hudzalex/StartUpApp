@@ -22,9 +22,22 @@
             android:textAlignment="center"
             android:text="Conduct analysis"/>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:id="@+id/text_time"
+            android:text="Measure #1"/>
+
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_gravity="center" android:id="@+id/animationContainer" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:id="@+id/animationContainer" />
 
 
     </LinearLayout>

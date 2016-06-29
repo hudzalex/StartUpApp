@@ -75,37 +75,47 @@
                     android:text="Toxings"
                     android:id="@+id/textView3"
                     android:layout_gravity="left" />
+
+
                 <CheckBox
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mycotoxin T2"
                     android:id="@+id/checkBoxToxity1"
                     android:checked="false" />
+
+
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mycotoxin Don"
+                    android:text="Plate #2 Mycotoxin T2"
                     android:id="@+id/checkBoxToxity2"
                     android:checked="false" />
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mycotoxin Zearalenone"
+                    android:text="Plate #3 Mycotoxin T2"
                     android:id="@+id/checkBoxToxity3"
                     android:checked="false" />
+
+
                 <CheckBox
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mycotoxin Patulin"
                     android:id="@+id/checkBoxToxity4"
                     android:checked="false" />
                 <CheckBox
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Aflatoxin B1"
                     android:id="@+id/checkBoxToxity5"
                     android:checked="false" />
                 <CheckBox
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ochratoxin-A"
