@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class ReadMeasurementBluetoothTask {
-    static final boolean random = false;
+    static final boolean random = true;
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     static final String deviceAddress = "20:16:01:05:89:69";
 

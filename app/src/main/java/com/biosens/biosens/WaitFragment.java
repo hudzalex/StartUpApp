@@ -337,10 +337,10 @@ public class WaitFragment extends Fragment {
                 BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-don", rezult2, toxin2b, lon, lat, user_id, "Analys");
             }
             if (toxin3 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-zearalenone", rezult3, toxin3b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "leukosis", rezult3, toxin3b, lon, lat, user_id, "Analys");
             }
             if (toxin4 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-patulin", rezult4, toxin4b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "leukosis", rezult4, toxin4b, lon, lat, user_id, "Analys");
             }
             if (toxin5 == true) {
                 BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-b1", rezult5, toxin5b, lon, lat, user_id, "Analys");

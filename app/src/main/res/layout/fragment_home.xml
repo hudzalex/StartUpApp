@@ -90,13 +90,13 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mycotoxin Zearalenone"
+                    android:text="leukosis"
                     android:id="@+id/checkBoxToxity3"
                     android:checked="false" />
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mycotoxin Patulin"
+                    android:text="leukosis"
                     android:id="@+id/checkBoxToxity4"
                     android:checked="false" />
                 <CheckBox
