@@ -161,7 +161,7 @@ String userid;
                     if(countTables==0){
                         id = cursor.getString(0);
 
-                        url = new URL("http://192.168.88.122:5000/api/place/" + id);
+                        url = new URL("http://02.liveboard.tv:5000/api/place/" + id);
                         jsonParams.put("name", cursor.getString(1));
                         jsonParams.put("longitude", String.valueOf(cursor.getDouble(2)));
                         jsonParams.put("latitude", String.valueOf(cursor.getDouble(3)));
@@ -170,7 +170,7 @@ String userid;
 
                     } else if(countTables==1){
                         id = cursor.getString(0);
-                        url = new URL("http://192.168.88.122:5000/api/research/" + id);
+                        url = new URL("http://02.liveboard.tv:5000/api/research/" + id);
                         jsonParams.put("placeId", cursor.getString(1));
                         jsonParams.put("startTime", cursor.getString(2));
                         jsonParams.put("endTime", cursor.getString(3));
@@ -181,7 +181,7 @@ String userid;
 
                     }else if(countTables==2){
                         id = cursor.getString(0);
-                        url = new URL("http://192.168.88.122:5000/api/measurement/" + id);
+                        url = new URL("http://02.liveboard.tv:5000/api/measurement/" + id);
                         jsonParams.put("researchId", cursor.getString(1));
                         jsonParams.put("startTime", cursor.getString(2));
                         jsonParams.put("endTime", cursor.getString(3));

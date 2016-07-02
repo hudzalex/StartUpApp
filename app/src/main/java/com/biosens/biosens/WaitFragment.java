@@ -50,10 +50,11 @@ public class WaitFragment extends Fragment {
     SQLiteOpenHelper biosensDatabaseHelper;
     String placeId = "", user_id = "", CultureId = "";
     private double rez1, rez2, rez3, rez4, rez5, rez6;
-    double toxin1b = .1;
-    double toxin2b = .1;
-    double toxin3b = .1;
-    double toxin4b = .1;
+    double toxin1b = .2;
+    double toxin2b = 0.0005;
+    double toxin3b = 0.5;
+    double toxin4b = 0.005;
+
     double toxin5b = .1;
     double toxin6b = .1;
     private LocationManager locationManager;
@@ -340,6 +341,18 @@ public class WaitFragment extends Fragment {
             rezult5 = rezult1 < 0 ? 0 : rezult5;
             rezult6 = rezult1 < 0 ? 0 : rezult6;
 
+
+
+
+            rezult1 = 1;
+            rezult2 = 0.001;
+            rezult3 = .3;
+            rezult4 = .0045;
+            rezult5 = .09;
+            rezult6 = .09;
+
+
+
             boolean haveToxin = (rezult1 > toxin1b && toxin1 == true)
                     || (rezult2 > toxin2b && toxin2 == true)
                     || (rezult3 > toxin3b && toxin3 == true)
@@ -366,19 +379,19 @@ public class WaitFragment extends Fragment {
             String data = dateFormat.format(c.getTime());
 
 
-//            if (toxin1 == true) {
-//                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult1, toxin1b, lon, lat, user_id, "Analys");
-//                // if(rezult1>toxin1b){}
-//            }
+            if (toxin1 == true) {
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult1, toxin1b, lon, lat, user_id, "Analys");
+                // if(rezult1>toxin1b){}
+            }
             if (toxin2 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult2, toxin2b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-m1", rezult2, toxin2b, lon, lat, user_id, "Analys");
             }
             if (toxin3 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult3, toxin3b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "patulin", rezult3, toxin3b, lon, lat, user_id, "Analys");
             }
-//            if (toxin4 == true) {
-//                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-patulin", rezult4, toxin4b, lon, lat, user_id, "Analys");
-//            }
+            if (toxin4 == true) {
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a", rezult4, toxin4b, lon, lat, user_id, "Analys");
+            }
 //            if (toxin5 == true) {
 //                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-b1", rezult5, toxin5b, lon, lat, user_id, "Analys");
 //            }

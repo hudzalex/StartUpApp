@@ -78,10 +78,9 @@
 
 
                 <CheckBox
-                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mycotoxin T2"
+                    android:text="Plate #1 Mycotoxin T2"
                     android:id="@+id/checkBoxToxity1"
                     android:checked="false" />
 
@@ -89,24 +88,24 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Plate #2 Mycotoxin T2"
+                    android:text="Plate #2 Aflatoxin M1"
                     android:id="@+id/checkBoxToxity2"
                     android:checked="false" />
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Plate #3 Mycotoxin T2"
+                    android:text="Plate #3 Patulin"
                     android:id="@+id/checkBoxToxity3"
                     android:checked="false" />
 
 
                 <CheckBox
-                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mycotoxin Patulin"
+                    android:text="Plate #4 Ochratoxin A"
                     android:id="@+id/checkBoxToxity4"
                     android:checked="false" />
+
                 <CheckBox
                     android:visibility="invisible"
                     android:layout_width="wrap_content"
