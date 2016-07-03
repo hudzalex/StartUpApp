@@ -1,6 +1,7 @@
 package com.biosens.biosens;
 
 import android.*;
+import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -30,24 +32,28 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
 
 
-public class ResFragment extends ListFragment {
+public class ResFragment extends ListFragment  {
     SQLiteDatabase db;
     SQLiteOpenHelper biosensDatabaseHelper;
     Cursor cursor;
     SessionManagement session;
-
+    private static final DateFormat orig = new SimpleDateFormat("yyyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final DateFormat target = new SimpleDateFormat("dd MMMM yyyy HH:mm");
     final Random random = new Random();
    int ImageId;
     String ResearchId = "", ListText="";
-
-
+     int havetoxin=0;
+      TextView ToxinName=null;
 
 
     @Override
@@ -84,7 +90,7 @@ public class ResFragment extends ListFragment {
                         db = biosensDatabaseHelper.getReadableDatabase();
 
                         cursor = db.query("research",
-                                new String[]{"place_id", "end_time"},
+                                new String[]{"place_id", "end_time","have_toxin","sync"},
                                 "_id= ?",
                                 new String[]{ResearchId},
                                 null, null, null);
@@ -97,6 +103,8 @@ public class ResFragment extends ListFragment {
                     cursor.moveToFirst();
                     final String PlaceId = cursor.getString(0);
                     final String ResearcgDate = cursor.getString(1);
+                    havetoxin=cursor.getInt(2);
+                    final int researcSync=cursor.getInt(3);
                     cursor.close();
                     try {
                         SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
@@ -127,7 +135,7 @@ public class ResFragment extends ListFragment {
                         db = biosensDatabaseHelper.getReadableDatabase();
 
                         cursor = db.query("measurement",
-                                new String[]{"unit", "value", "boundary_value", "_id"},
+                                new String[]{"unit", "value", "boundary_value", "_id","sync"},
                                 "user_id= ? and research_id= ?",
                                 new String[]{user_id, ResearchId},
                                 null, null, null);
@@ -147,9 +155,29 @@ public class ResFragment extends ListFragment {
 
 
 
+
+        cursor.moveToFirst();
+
+        final int measurementSync=cursor.getInt(4);
+
+
+
+
                             TextView fieldName = (TextView) layout.findViewById(R.id.field_name);
                             TextView DateRez = (TextView) layout.findViewById(R.id.date_rez);
                             TextView TextRez = (TextView) layout.findViewById(R.id.textRez);
+        TextView TextSync = (TextView) layout.findViewById(R.id.textSync);
+                         ToxinName = (TextView) inflater.inflate(R.layout.fragment_res_item, container, false).findViewById(R.id.Toxin_name);
+
+        if (researcSync == 0 || measurementSync == 0) {
+            TextSync.setText("Unsynchronized");
+
+
+
+        } else {
+            TextSync.setText("Synchronized");
+
+        }
 
                             ImageView photo = (ImageView) layout.findViewById(R.id.field_image);
                             ImageView photoRez = (ImageView) layout.findViewById(R.id.rez_image);
@@ -159,21 +187,60 @@ public class ResFragment extends ListFragment {
 
 
                             fieldName.setText(PlaceName);
-                            DateRez.setText(ResearcgDate);
-                            TextRez.setText(ListText);
+
+
+        try {
+            DateRez.setText(convertDate(ResearcgDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        TextRez.setText(ListText);
                             photoRez.setImageResource(ImageId);
                             photoRez.setContentDescription("Rez");
 
 
-                            ListView resList = (ListView) layout.findViewById(android.R.id.list);
-
-                            resList.setAdapter(listAdapter);
 
 
+
+      //  listAdapter.setViewBinder(new MyViewBinder());
+        ListView resList = (ListView) layout.findViewById(android.R.id.list);
+
+        resList.setAdapter(listAdapter);
         return layout;
+    }
+    private static String convertDate(String d) throws ParseException {
+        return target.format(orig.parse(d));
     }
 
 
 
-
 }
+
+//    class MyViewBinder implements SimpleCursorAdapter.ViewBinder {
+//
+//
+//
+//        @Override
+//        public boolean setViewValue(View view, Cursor cursor, int columnIndex){
+//
+//
+//            int id = cursor.getColumnIndex("_id");
+//            if (id == columnIndex) {
+//                if (havetoxin == 1) {
+//                    ToxinName.setTextColor(Color.RED);
+//
+//
+//
+//                } else {
+//                    ToxinName.setTextColor(Color.GREEN);
+//
+//                }
+//
+//
+//                return true;
+//            }
+//            return false;
+//        }};
+//    }
+
+

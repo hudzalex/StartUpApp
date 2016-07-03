@@ -98,7 +98,7 @@ String userid;
     private final Handler toastHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Synchronizing data", Toast.LENGTH_SHORT).show();
         }
     };
 

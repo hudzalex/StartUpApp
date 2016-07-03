@@ -70,7 +70,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "end_time TEXT NOT NULL,"
                     + "unit TEXT NOT NULL,"
                     + "value NUMERIC NOT NULL,"
-                    + "boundary_value NUMERIC NOT NULL,"
+                    + "boundary_value NUMERIC NULL,"
                     + "longitude NUMERIC NOT NULL,"
                     + "latitude NUMERIC NOT NULL,"
                     + "user_id TEXT NOT NULL,"
@@ -195,6 +195,16 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = new String[] {Id};
         db.update(TtableName, updateSync, where, whereArgs);
     }
+
+    public static void updatePlace(SQLiteDatabase db,  String Id, String name){
+        ContentValues updatePlace=new ContentValues();
+        updatePlace.put("name",name);
+        updatePlace.put("sync",false);
+        String where = "_id=?";
+        String[] whereArgs = new String[] {Id};
+        db.update("place", updatePlace, where, whereArgs);
+    }
+
 
 
     public static void insertMeasurement(SQLiteDatabase db, String research_id, String startTime, String endTime,String unit,double value,double boundary_value,double Longitude, double Latitude, String user_id, String description){

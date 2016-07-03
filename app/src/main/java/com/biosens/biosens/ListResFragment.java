@@ -18,6 +18,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 
@@ -29,6 +32,8 @@ public class ListResFragment extends Fragment {
     int ImageId;
     String ListText;
     int rez;
+    private static final DateFormat orig = new SimpleDateFormat("yyyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final DateFormat target = new SimpleDateFormat("dd MMMM yyyy HH:mm");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,7 +51,7 @@ public class ListResFragment extends Fragment {
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("research",
-                    new String[]{"place_id","end_time","have_toxin"},
+                    new String[]{"place_id","end_time","have_toxin","Sync"},
                     "user_id= ? and _id= ?",
                     new String[] {user_id,row_id},
                     null, null,null);
@@ -60,6 +65,7 @@ public class ListResFragment extends Fragment {
         int haveToxin=cursor.getInt(2);
         String PlaceId=cursor.getString(0);
         String ResearcgDate=cursor.getString(1);
+        final int researcSync=cursor.getInt(3);
         cursor.close();
         try {
             SQLiteOpenHelper biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
@@ -103,7 +109,11 @@ public class ListResFragment extends Fragment {
 
 
         fieldName.setText(PlaceName);
-        DateRez.setText(ResearcgDate);
+        try {
+            DateRez.setText(convertDate(ResearcgDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         TextRez.setText(ListText);
         photoRez.setImageResource(ImageId);
         photoRez.setContentDescription("Rez");
@@ -113,7 +123,7 @@ public class ListResFragment extends Fragment {
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("measurement",
-                    new String[]{"unit", "value","boundary_value","_id"},
+                    new String[]{"unit", "value","boundary_value","_id","sync"},
                     "user_id= ? and research_id= ?",
                     new String[] {user_id,row_id},
                     null, null,null);
@@ -133,8 +143,27 @@ public class ListResFragment extends Fragment {
             Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
+        cursor.moveToFirst();
+
+        final int measurementSync=cursor.getInt(4);
+
+        TextView TextSync = (TextView) layout.findViewById(R.id.textSync);
+
+        if (researcSync == 0 || measurementSync == 0) {
+            TextSync.setText("Unsynchronized");
+
+
+
+        } else {
+            TextSync.setText("Synchronized");
+
+        }
+
+
         return layout;
     }
 
-
+    private static String convertDate(String d) throws ParseException {
+        return target.format(orig.parse(d));
+    }
 }

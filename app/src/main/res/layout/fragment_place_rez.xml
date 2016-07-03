@@ -60,10 +60,10 @@ android:layout_width="match_parent"
 android:layout_height="wrap_content">
 
 <AutoCompleteTextView
-    android:id="@+id/editTextCulture"
+    android:id="@+id/editTextNamePlace"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="Culture"
+    android:hint="New name place"
     android:completionThreshold="1"
     android:lines="1"
     android:maxLines="1"
@@ -75,6 +75,6 @@ android:layout_height="wrap_content">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Змінити місце"
-        android:id="@+id/button"
+        android:id="@+id/ubutton"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

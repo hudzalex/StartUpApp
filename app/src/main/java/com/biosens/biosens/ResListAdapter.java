@@ -11,6 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Sasha on 25.06.2016.
  */
@@ -18,6 +22,8 @@ public class ResListAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final String[] values;
     private SQLiteDatabase db;
+    private static final DateFormat orig = new SimpleDateFormat("yyyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final DateFormat target = new SimpleDateFormat("dd MMMM yyyy HH:mm");
     private Cursor cursor,cursor1;
     String placeName,Date,ListText,plase_id;
     int placePhoto,ImageId;
@@ -69,7 +75,13 @@ public class ResListAdapter extends ArrayAdapter<String> {
 
 
         fieldName.setText(cursor.getString(5));
-        DateRez.setText(cursor.getString(3));
+
+        try {
+            DateRez.setText(convertDate(cursor.getString(3)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         TextRez.setText(ListText);
         prev_image.setImageResource(cursor.getInt(6));
         prev_image.setContentDescription("Prev");
@@ -78,5 +90,9 @@ public class ResListAdapter extends ArrayAdapter<String> {
 
     }
         return rowView;
+    }
+
+    private static String convertDate(String d) throws ParseException {
+        return target.format(orig.parse(d));
     }
 }

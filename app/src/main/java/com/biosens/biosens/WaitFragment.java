@@ -63,7 +63,7 @@ public class WaitFragment extends Fragment {
     private static final int CAMERA_REQUEST = INITIAL_REQUEST + 1;
     private static final int CONTACTS_REQUEST = INITIAL_REQUEST + 2;
     private static final int LOCATION_REQUEST = INITIAL_REQUEST + 3;
-    int time = 60 * 10;
+    int time = 60*10;
     String researchId = "";
     int ImageId;
     String ListText;
@@ -356,9 +356,9 @@ public class WaitFragment extends Fragment {
             boolean haveToxin = (rezult1 > toxin1b && toxin1 == true)
                     || (rezult2 > toxin2b && toxin2 == true)
                     || (rezult3 > toxin3b && toxin3 == true)
-                    || (rezult4 > toxin4b && toxin4 == true)
-                    || (rezult5 > toxin5b && toxin5 == true)
-                    || (rezult6 > toxin6b && toxin6 == true);
+                    || (rezult4 > toxin4b && toxin4 == true);
+//                    || (rezult5 > toxin5b && toxin5 == true)
+//                    || (rezult6 > toxin6b && toxin6 == true);
 
             if (haveToxin) {
                 ImageId = R.drawable.fail;
@@ -392,12 +392,12 @@ public class WaitFragment extends Fragment {
             if (toxin4 == true) {
                 BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a", rezult4, toxin4b, lon, lat, user_id, "Analys");
             }
-//            if (toxin5 == true) {
-//                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-b1", rezult5, toxin5b, lon, lat, user_id, "Analys");
-//            }
-//            if (toxin6 == true) {
-//                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a", rezult6, toxin6b, lon, lat, user_id, "Analys");
-//            }
+
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "Temparature", rezult5, 0, lon, lat, user_id, "Analys");
+
+
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "Relative Humidity", rezult6, 0, lon, lat, user_id, "Analys");
+
         } catch (InterruptedException ex) {
 
         }
