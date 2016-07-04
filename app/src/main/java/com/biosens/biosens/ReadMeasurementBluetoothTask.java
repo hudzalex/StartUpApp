@@ -93,11 +93,12 @@ public class ReadMeasurementBluetoothTask {
 
                 int i = 0;
                 for (Double num : resultNum) {
-//                    if (i == 0) {
-//                        result[i] = 0.22950819672131 * num - 5.1475409836066;
-//                    } else {
-                        result[i] = num;
-//                    }
+if(i<=3){
+                        result[i] = 0.22950819672131 * num - 5.1475409836066;}
+                    else{
+
+                       result[i] = num;}
+
                     i++;
                 }
 

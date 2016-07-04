@@ -63,7 +63,7 @@ public class WaitFragment extends Fragment {
     private static final int CAMERA_REQUEST = INITIAL_REQUEST + 1;
     private static final int CONTACTS_REQUEST = INITIAL_REQUEST + 2;
     private static final int LOCATION_REQUEST = INITIAL_REQUEST + 3;
-    int time = 60*10;
+    int time = 3*10;
     String researchId = "";
     int ImageId;
     String ListText;
@@ -327,29 +327,29 @@ public class WaitFragment extends Fragment {
             rez6 = result[5];
 
 
-            double rezult1 = (rez1 - ResStartValue1) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
-            double rezult2 = (rez2 - ResStartValue2) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
-            double rezult3 = (rez3 - ResStartValue3) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
-            double rezult4 = (rez4 - ResStartValue4) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
-            double rezult5 = (rez5 - ResStartValue5) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
-            double rezult6 = (rez6 - ResStartValue6) >= 500 ? (.11 + Math.random() * 0.1) : (.09 - Math.random() * .01);
+            double rezult1 = (rez1 - ResStartValue1) >= 500 ? (.11 + Math.random() * 0.1) : (.02 - Math.random() * .01);
+            double rezult2 = (rez2 - ResStartValue2) >= 500 ? (.11 + Math.random() * 0.1) : (.0005 - Math.random() * .0003);
+            double rezult3 = (rez3 - ResStartValue3) >= 500 ? (.11 + Math.random() * 0.1) : (.5 - Math.random() * .03);
+            double rezult4 = (rez4 - ResStartValue4) >= 500 ? (.11 + Math.random() * 0.1) : (.0005 - Math.random() * .0002);
+            double rezult5 = rez5 ;
+            double rezult6 = rez6;
 
-            rezult1 = rezult1 < 0 ? 0 : rezult1;
-            rezult2 = rezult1 < 0 ? 0 : rezult2;
-            rezult3 = rezult1 < 0 ? 0 : rezult3;
-            rezult4 = rezult1 < 0 ? 0 : rezult4;
-            rezult5 = rezult1 < 0 ? 0 : rezult5;
-            rezult6 = rezult1 < 0 ? 0 : rezult6;
-
-
+//            rezult1 = rezult1 < 0 ? 0 : rezult1;
+//            rezult2 = rezult1 < 0 ? 0 : rezult2;
+//            rezult3 = rezult1 < 0 ? 0 : rezult3;
+//            rezult4 = rezult1 < 0 ? 0 : rezult4;
+//            rezult5 = rezult1 < 0 ? 0 : rezult5;
+//            rezult6 = rezult1 < 0 ? 0 : rezult6;
 
 
-            rezult1 = 1;
-            rezult2 = 0.001;
-            rezult3 = .3;
-            rezult4 = .0045;
-            rezult5 = .09;
-            rezult6 = .09;
+
+
+//            rezult1 = 1;
+//            rezult2 = 0.001;
+//            rezult3 = .3;
+//            rezult4 = .0045;
+//            rezult5 = .09;
+//            rezult6 = .09;
 
 
 

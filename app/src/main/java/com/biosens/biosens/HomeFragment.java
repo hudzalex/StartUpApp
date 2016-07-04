@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
@@ -62,6 +63,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private SQLiteDatabase db;
     SessionManagement session;
     SQLiteOpenHelper biosensDatabaseHelper;
+    private LocationManager locationManager;
     private double rez1, rez2, rez3, rez4, rez5, rez6;
     //  EditText dateEditText;
     WaitFragment wfrag;
@@ -122,9 +124,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         checkBoxToxity6 = (CheckBox) layout.findViewById(R.id.checkBoxToxity6);
         startButton.setOnClickListener(this);
 
+
         biosensDatabaseHelper = new BioSensDatabaseHelper(inflater.getContext());
         db = biosensDatabaseHelper.getWritableDatabase();
         session = new SessionManagement(inflater.getContext());
+
+        locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Enable GPS", Toast.LENGTH_SHORT);
+            toast.show();
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+        }
 
         HashMap<String, String> user = session.getUserDetails();
         user_id = user.get(SessionManagement.KEY_ID);

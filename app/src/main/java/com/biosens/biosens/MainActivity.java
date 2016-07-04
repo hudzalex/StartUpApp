@@ -5,6 +5,8 @@ import android.*;
 import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity
         HomeFragment hfrag;
     ResultFragment rfrag;
 PlaceListFragment pfrag;
+    private static final int REQUEST_ENABLE_BT = 1;
+    private BluetoothAdapter mBluetoothAdapter;
     private TextView mDataField;
     private String[] titles;
     private int seconds=0;
@@ -162,7 +166,16 @@ PlaceListFragment pfrag;
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
 
+        if (!mBluetoothAdapter.isEnabled()) {
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
+        }
 
        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
