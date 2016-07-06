@@ -123,7 +123,7 @@ public class ListResFragment extends Fragment {
             db = biosensDatabaseHelper.getReadableDatabase();
 
             cursor = db.query("measurement",
-                    new String[]{"unit", "value","boundary_value","_id","sync"},
+                    new String[]{"unit_view", "value","unit_value", "boundary_value", "_id","sync"},
                     "user_id= ? and research_id= ?",
                     new String[] {user_id,row_id},
                     null, null,null);
@@ -131,8 +131,8 @@ public class ListResFragment extends Fragment {
             CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                     R.layout.fragment_res_item,
                     cursor,
-                    new String[]{"unit","value","boundary_value"},
-                    new int[]{R.id.Toxin_name,R.id.Rez_nameValue,R.id.Rez_nameBValue},
+                    new String[]{"unit_view", "value", "boundary_value","unit_value","unit_value"},
+                    new int[]{R.id.Toxin_name, R.id.Rez_nameValue, R.id.Rez_nameBValue,R.id.textUnitVal, R.id.textUnitValB},
                     0);
             ListView resList = (ListView)layout.findViewById(android.R.id.list);
 

@@ -69,6 +69,8 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
                     + "start_time TEXT NOT NULL,"
                     + "end_time TEXT NOT NULL,"
                     + "unit TEXT NOT NULL,"
+                    + "unit_view TEXT NOT NULL,"
+                    + "unit_value TEXT NOT NULL,"
                     + "value NUMERIC NOT NULL,"
                     + "boundary_value NUMERIC NULL,"
                     + "longitude NUMERIC NOT NULL,"
@@ -207,7 +209,7 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public static void insertMeasurement(SQLiteDatabase db, String research_id, String startTime, String endTime,String unit,double value,double boundary_value,double Longitude, double Latitude, String user_id, String description){
+    public static void insertMeasurement(SQLiteDatabase db, String research_id, String startTime, String endTime,String unit, String unit_view, String unit_value,double value,double boundary_value,double Longitude, double Latitude, String user_id, String description){
         ContentValues measurementValues=new ContentValues();
         UUID test_uuid = UUID.randomUUID();
         boolean sync=false;
@@ -216,6 +218,8 @@ public class BioSensDatabaseHelper extends SQLiteOpenHelper {
         measurementValues.put("start_time",startTime);
         measurementValues.put("end_time", endTime);
         measurementValues.put("unit",unit);
+        measurementValues.put("unit_view",unit_view);
+        measurementValues.put("unit_value",unit_value);
         measurementValues.put("value",value);
         measurementValues.put("boundary_value",boundary_value);
         measurementValues.put("longitude",Longitude);

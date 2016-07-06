@@ -135,16 +135,15 @@ public class ResFragment extends ListFragment  {
                         db = biosensDatabaseHelper.getReadableDatabase();
 
                         cursor = db.query("measurement",
-                                new String[]{"unit", "value", "boundary_value", "_id","sync"},
+                                new String[]{"unit_view", "value","unit_value", "boundary_value", "_id","sync"},
                                 "user_id= ? and research_id= ?",
                                 new String[]{user_id, ResearchId},
                                 null, null, null);
-
                         listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                                 R.layout.fragment_res_item,
                                 cursor,
-                                new String[]{"unit", "value", "boundary_value"},
-                                new int[]{R.id.Toxin_name, R.id.Rez_nameValue, R.id.Rez_nameBValue},
+                                new String[]{"unit_view", "value", "boundary_value","unit_value","unit_value"},
+                                new int[]{R.id.Toxin_name, R.id.Rez_nameValue, R.id.Rez_nameBValue,R.id.textUnitVal, R.id.textUnitValB},
                                 0);
                     } catch (SQLiteException e) {
                         Toast toast = Toast.makeText(inflater.getContext(), "Database unavailable", Toast.LENGTH_SHORT);
@@ -211,6 +210,8 @@ public class ResFragment extends ListFragment  {
     private static String convertDate(String d) throws ParseException {
         return target.format(orig.parse(d));
     }
+
+
 
 
 

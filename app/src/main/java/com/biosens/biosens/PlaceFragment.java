@@ -165,8 +165,11 @@ public class PlaceFragment extends Fragment implements View.OnClickListener {
 
         if(inp%2==0){
             PrevImageId=R.drawable.field_1;
-        }else{
-            PrevImageId=R.drawable.field_2;
+        }else {
+            if(inp==3){
+            PrevImageId=R.drawable.cow;}
+            else{
+            PrevImageId=R.drawable.field_2;}
         }
         cursor.close();
 

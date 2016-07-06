@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -327,12 +328,13 @@ public class WaitFragment extends Fragment {
             rez6 = result[5];
 
 
-            double rezult1 = (rez1 - ResStartValue1) >= 500 ? (.11 + Math.random() * 0.1) : (.02 - Math.random() * .01);
-            double rezult2 = (rez2 - ResStartValue2) >= 500 ? (.11 + Math.random() * 0.1) : (.0005 - Math.random() * .0003);
-            double rezult3 = (rez3 - ResStartValue3) >= 500 ? (.11 + Math.random() * 0.1) : (.5 - Math.random() * .03);
-            double rezult4 = (rez4 - ResStartValue4) >= 500 ? (.11 + Math.random() * 0.1) : (.0005 - Math.random() * .0002);
+            double rezult1 = Double.valueOf(String.format(Locale.ENGLISH, "%(.2f", (rez1 - ResStartValue1) >= 500 ? (.11 + Math.random() * 0.1) : (.2 - Math.random() * .1)));
+            double rezult2 = Double.valueOf(String.format(Locale.ENGLISH, "%(.5f",(rez2 - ResStartValue2) >= 500 ? (.11 + Math.random() * 0.1) : (.0005 - Math.random() * .0003)));
+            double rezult3 = Double.valueOf(String.format(Locale.ENGLISH, "%(.2f",(rez3 - ResStartValue3) >= 500 ? (.11 + Math.random() * 0.1) : (.5 - Math.random() * .03)));
+            double rezult4 = Double.valueOf(String.format(Locale.ENGLISH, "%(.4f",(rez4 - ResStartValue4) >= 500 ? (.11 + Math.random() * 0.1) : (.005 - Math.random() * .002)));
             double rezult5 = rez5 ;
             double rezult6 = rez6;
+
 
 //            rezult1 = rezult1 < 0 ? 0 : rezult1;
 //            rezult2 = rezult1 < 0 ? 0 : rezult2;
@@ -380,23 +382,23 @@ public class WaitFragment extends Fragment {
 
 
             if (toxin1 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2", rezult1, toxin1b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2","Mycotoxin T2","mg/kg", rezult1, toxin1b, lon, lat, user_id, "Analys");
                 // if(rezult1>toxin1b){}
             }
             if (toxin2 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-m1", rezult2, toxin2b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-m1","Aflatoxin M1", "mg/kg", rezult2, toxin2b, lon, lat, user_id, "Analys");
             }
             if (toxin3 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "patulin", rezult3, toxin3b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "patulin","Patulin", "mg/kg", rezult3, toxin3b, lon, lat, user_id, "Analys");
             }
             if (toxin4 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a", rezult4, toxin4b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a","Ochratoxin A", "mg/kg", rezult4, toxin4b, lon, lat, user_id, "Analys");
             }
 
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "Temparature", rezult5, 0, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "temperature","Temperature","°C", rezult5, 24, lon, lat, user_id, "Analys");
 
 
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "Relative Humidity", rezult6, 0, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "relative-humidity","Relative Humidity","%", rezult6, 70, lon, lat, user_id, "Analys");
 
         } catch (InterruptedException ex) {
 
