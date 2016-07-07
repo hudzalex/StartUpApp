@@ -64,7 +64,7 @@ public class WaitFragment extends Fragment {
     private static final int CAMERA_REQUEST = INITIAL_REQUEST + 1;
     private static final int CONTACTS_REQUEST = INITIAL_REQUEST + 2;
     private static final int LOCATION_REQUEST = INITIAL_REQUEST + 3;
-    int time = 3*10;
+    int time = 48*10;
     String researchId = "";
     int ImageId;
     String ListText;
@@ -382,17 +382,17 @@ public class WaitFragment extends Fragment {
 
 
             if (toxin1 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2","Mycotoxin T2","mg/kg", rezult1, toxin1b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "mycotoxin-t2","Mycotoxin T2","mg/l", rezult1, toxin1b, lon, lat, user_id, "Analys");
                 // if(rezult1>toxin1b){}
             }
             if (toxin2 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-m1","Aflatoxin M1", "mg/kg", rezult2, toxin2b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "aflatoxin-m1","Aflatoxin M1", "mg/l", rezult2, toxin2b, lon, lat, user_id, "Analys");
             }
             if (toxin3 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "patulin","Patulin", "mg/kg", rezult3, toxin3b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "patulin","Patulin", "mg/l", rezult3, toxin3b, lon, lat, user_id, "Analys");
             }
             if (toxin4 == true) {
-                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a","Ochratoxin A", "mg/kg", rezult4, toxin4b, lon, lat, user_id, "Analys");
+                BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "ochratoxin-a","Ochratoxin A", "mg/l", rezult4, toxin4b, lon, lat, user_id, "Analys");
             }
 
                 BioSensDatabaseHelper.insertMeasurement(db, researchId, data, data, "temperature","Temperature","°C", rezult5, 24, lon, lat, user_id, "Analys");

@@ -186,7 +186,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
 
         cursor.moveToFirst();
-        cultureEditText.setText(cursor.getString(1));
+      //  cultureEditText.setText(cursor.getString(1));
         CultureId = cursor.getString(0);
         cursor.close();
 
